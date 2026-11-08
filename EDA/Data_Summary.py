@@ -12,7 +12,7 @@ def DataSummary(df):
     print("\n" + "=" * 70)
     print("                  DATASET OVERVIEW")
     print("=" * 70)
-
+    print(df.sample(100))
     print("\nDataset Shape:")
     print(df.shape)
 

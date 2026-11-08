@@ -1,109 +1,142 @@
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
 
-# Load data
-df = pd.read_csv(r"C:\Users\ARYAN MAHAKUR\Downloads\archive (8)\Airline_Delay_Cause.csv")
+# 1. Load dataset
+file_path = (
+    r"C:\Users\ARYAN MAHAKUR\Downloads\archive (8)\Airline_Delay_Cause.csv"
+)
+df = pd.read_csv(file_path)
 
-# =========================================================
-# 1. BASIC SUMMARY
-# =========================================================
-print("="*60)
-print("DATASET SUMMARY")
-print("="*60)
-print(f"Shape              : {df.shape}")
-print(f"Total Records      : {df.shape[0]:,}")
-print(f"Total Features     : {df.shape[1]}")
-print(f"Duplicate Rows     : {df.duplicated().sum()}")
-print(f"Total Missing Values: {df.isnull().sum().sum():,}")
+# Ensure data leakage columns are dropped if still present in the file
+cols_to_drop = [
+    "arr_del15",
+    "carrier_delay",
+    "weather_delay",
+    "nas_delay",
+    "security_delay",
+    "late_aircraft_delay",
+    "carrier_ct",
+    "weather_ct",
+    "nas_ct",
+    "security_ct",
+    "late_aircraft_ct",
+    "arr_cancelled",
+    "arr_diverted",
+    "carrier_name",
+    "airport_name",
+]
+df.drop(columns=cols_to_drop, inplace=True, errors="ignore")
 
-# =========================================================
-# 2. FEATURES WITH MOST NULL VALUES
-# =========================================================
-print("\n" + "="*60)
-print("FEATURES WITH MOST NULL VALUES")
-print("="*60)
+# Drop rows where target or flights are missing
+df_clean = df.dropna(subset=["arr_delay", "arr_flights"]).copy()
 
-null_df = pd.DataFrame({
-    "Missing Count": df.isnull().sum(),
-    "Missing %": (df.isnull().mean() * 100).round(2)
-}).sort_values("Missing Count", ascending=False)
-
-print(null_df[null_df["Missing Count"] > 0])
-
-# =========================================================
-# 3. TARGET VARIABLE
-# =========================================================
-print("\n" + "="*60)
-print("TARGET VARIABLE (y)")
-print("="*60)
-print("y = arr_delay  (Total Delay Time in minutes)")
-
-y = df["arr_delay"]
-
-# =========================================================
-# 4. MOST IMPORTANT FEATURES (Correlation with arr_delay)
-# =========================================================
-print("\n" + "="*60)
-print("MOST IMPORTANT FEATURES (Correlation with arr_delay)")
-print("="*60)
-
-# Only numerical columns
-num_cols = df.select_dtypes(include=np.number).columns.tolist()
-corr = df[num_cols].corr()["arr_delay"].drop("arr_delay").sort_values(ascending=False)
-
-print(corr)
-
-# =========================================================
-# 5. PLOTS
-# =========================================================
-
+# Set plot style
 plt.style.use("seaborn-v0_8-whitegrid")
-sns.set_palette("viridis")
+palette = "viridis"
 
-# ----- Plot 1: Missing Values -----
+# =========================================================
+# PLOT 1: Average Arrival Delay by Month
+# =========================================================
 plt.figure(figsize=(10, 5))
-null_df[null_df["Missing Count"] > 0]["Missing %"].plot(kind="bar", color="salmon")
-plt.title("Features with Missing Values (%)", fontsize=14)
-plt.ylabel("Missing Percentage")
-plt.xticks(rotation=45, ha="right")
+monthly_delay = df_clean.groupby("month")["arr_delay"].mean().reset_index()
+sns.barplot(
+    data=monthly_delay, x="month", y="arr_delay", palette="crest", hue="month"
+)
+plt.title(
+    "Average Arrival Delay (Minutes) by Month", fontsize=14, fontweight="bold"
+)
+plt.xlabel("Month", fontsize=12)
+plt.ylabel("Mean Arrival Delay (min)", fontsize=12)
 plt.tight_layout()
 plt.show()
 
-# ----- Plot 2: Distribution of Target (arr_delay) -----
+# =========================================================
+# PLOT 2: Distribution of Arrival Flights (arr_flights)
+# =========================================================
 plt.figure(figsize=(10, 5))
-sns.histplot(df["arr_delay"].dropna(), bins=50, kde=True, color="steelblue")
-plt.title("Distribution of Total Delay Time (arr_delay)", fontsize=14)
-plt.xlabel("Total Delay Minutes")
-plt.ylabel("Frequency")
+sns.histplot(
+    df_clean["arr_flights"], bins=50, kde=True, color="steelblue"
+)
+plt.title(
+    "Distribution of Arrival Flights per Record", fontsize=14, fontweight="bold"
+)
+plt.xlabel("Arrival Flights", fontsize=12)
+plt.ylabel("Frequency", fontsize=12)
 plt.tight_layout()
 plt.show()
 
-# ----- Plot 3: Correlation of Numerical Features with Target -----
-plt.figure(figsize=(10, 6))
-corr.plot(kind="barh", color="teal")
-plt.title("Correlation of Features with arr_delay (Target)", fontsize=14)
-plt.xlabel("Correlation Coefficient")
+# =========================================================
+# PLOT 3: Top 10 Carriers with Highest Total Delays
+# =========================================================
+plt.figure(figsize=(12, 6))
+top_carriers = (
+    df_clean.groupby("carrier")["arr_delay"]
+    .sum()
+    .sort_values(ascending=False)
+    .head(10)
+    .reset_index()
+)
+sns.barplot(
+    data=top_carriers,
+    x="carrier",
+    y="arr_delay",
+    palette="magma",
+    hue="carrier",
+)
+plt.title(
+    "Top 10 Carriers by Cumulative Arrival Delay",
+    fontsize=14,
+    fontweight="bold",
+)
+plt.xlabel("Carrier Code", fontsize=12)
+plt.ylabel("Total Delay Minutes", fontsize=12)
 plt.tight_layout()
 plt.show()
 
-# ----- Plot 4: Top 8 Most Correlated Features (Heatmap style) -----
-top_features = corr.head(8).index.tolist() + ["arr_delay"]
-plt.figure(figsize=(10, 8))
-sns.heatmap(df[top_features].corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
-plt.title("Correlation Heatmap - Top Features vs arr_delay", fontsize=14)
+# =========================================================
+# PLOT 4: Top 10 Airports with Highest Total Delays
+# =========================================================
+plt.figure(figsize=(12, 6))
+top_airports = (
+    df_clean.groupby("airport")["arr_delay"]
+    .sum()
+    .sort_values(ascending=False)
+    .head(10)
+    .reset_index()
+)
+sns.barplot(
+    data=top_airports,
+    x="airport",
+    y="arr_delay",
+    palette="rocket",
+    hue="airport",
+)
+plt.title(
+    "Top 10 Airports by Cumulative Arrival Delay", fontsize=14, fontweight="bold"
+)
+plt.xlabel("Airport Code", fontsize=12)
+plt.ylabel("Total Delay Minutes", fontsize=12)
 plt.tight_layout()
 plt.show()
 
-# ----- Plot 5: Average Delay by Month -----
-plt.figure(figsize=(10, 5))
-monthly_delay = df.groupby("month")["arr_delay"].mean()
-sns.barplot(x=monthly_delay.index, y=monthly_delay.values, palette="magma")
-plt.title("Average Total Delay by Month", fontsize=14)
-plt.xlabel("Month")
-plt.ylabel("Average Delay Minutes")
+# =========================================================
+# PLOT 5: Correlation Heatmap (Clean Numerical Features)
+# =========================================================
+plt.figure(figsize=(8, 6))
+num_cols = ["year", "month", "arr_flights", "arr_delay"]
+corr_matrix = df_clean[num_cols].corr()
+
+sns.heatmap(
+    corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.8
+)
+plt.title(
+    "Correlation Heatmap (Cleaned Numerical Features)",
+    fontsize=14,
+    fontweight="bold",
+)
 plt.tight_layout()
 plt.show()
 
-print("\nAll plots generated successfully!")
+print("All cleaned EDA plots generated successfully!")
