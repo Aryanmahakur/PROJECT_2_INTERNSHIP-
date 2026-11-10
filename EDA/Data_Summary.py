@@ -1,167 +1,328 @@
-import numpy as np
+
+import os
 import pandas as pd
+import numpy as np
 
-# Load CSV file
-df = pd.read_csv(r"C:\Users\ARYAN MAHAKUR\Downloads\archive (8)\Airline_Delay_Cause.csv")
+# ==========================================
+# 1. CONFIGURATION
+# ==========================================
 
-def DataSummary(df):
+pd.set_option("display.max_columns", None)
+pd.set_option("display.max_rows", 150)
+pd.set_option("display.width", 1500)
+pd.set_option("display.float_format", "{:,.3f}".format)
 
-    # ==========================================================
-    # 1. DATASET OVERVIEW
-    # ==========================================================
-    print("\n" + "=" * 70)
-    print("                  DATASET OVERVIEW")
-    print("=" * 70)
-    print(df.sample(100))
-    print("\nDataset Shape:")
-    print(df.shape)
+file_path = (
+    r"C:\Users\ARYAN MAHAKUR\Desktop\VS CODE"
+    r"\PROJECT_2_INTERNSHIP\DataSet"
+    r"\subset_500k_airline_2025.csv"
+)
 
-    print("\nTotal Number of Records:")
-    print(df.shape[0])
+# ==========================================
+# 2. LOAD DATASET
+# ==========================================
 
-    print("\nTotal Number of Features:")
-    print(df.shape[1])
+print("\nLoading Dataset...")
 
-    print("\nTotal Dataset Elements:")
-    print(df.size)
+df = pd.read_csv(file_path, low_memory=False)
 
-    # ==========================================================
-    # 2. DATASET INFORMATION
-    # ==========================================================
-    print("\n" + "=" * 70)
-    print("                  DATASET INFORMATION")
-    print("=" * 70)
+rows, columns = df.shape
 
-    print("\nDataset Type:")
-    print(type(df))
+print("\n" + "=" * 90)
+print("                 DATASET OVERVIEW")
+print("=" * 90)
 
-    print("\nIndex Type:")
-    print(type(df.index))
+print(f"Dataset Shape          : {rows:,} Rows × {columns} Columns")
+print(f"Total Records          : {rows:,}")
+print(f"Total Features          : {columns}")
+print(f"Duplicate Rows         : {df.duplicated().sum():,}")
+print(f"Total Memory Usage     : {df.memory_usage(deep=True).sum() / (1024**2):,.2f} MB")
+print(f"Dataset File Size      : {os.path.getsize(file_path) / (1024**2):,.2f} MB")
 
-    print("\nDataset Information:")
-    df.info(memory_usage="deep")
+# ==========================================
+# 3. COLUMN DATA TYPES
+# ==========================================
 
-    print("\nMemory Usage (MB):")
-    print(f"{df.memory_usage(deep=True).sum() / (1024**2):.2f} MB")
+print("\n" + "=" * 90)
+print("                 COLUMN DATA TYPES")
+print("=" * 90)
 
-    # ==========================================================
-    # 3. COLUMN INFORMATION
-    # ==========================================================
-    print("\n" + "=" * 70)
-    print("                  COLUMN INFORMATION")
-    print("=" * 70)
+dtype_summary = pd.DataFrame({
+    "Data Type": df.dtypes.astype(str),
+    "Non-Null Count": df.notnull().sum(),
+    "Null Count": df.isnull().sum(),
+    "Null Percentage (%)": df.isnull().mean() * 100,
+    "Unique Values": df.nunique(dropna=True)
+})
 
-    print("\nColumn Names:")
-    print(df.columns.tolist())
+print(dtype_summary.sort_values(
+    by="Null Percentage (%)", ascending=False
+).to_string())
 
-    print("\nColumn Data Types:")
-    print(df.dtypes)
+print("\nData Type Distribution:")
+print(df.dtypes.value_counts())
 
-    print("\nData Type Distribution:")
-    print(df.dtypes.value_counts())
+# ==========================================
+# 4. MISSING VALUE ANALYSIS
+# ==========================================
 
-    # ==========================================================
-    # 4. MISSING VALUE ANALYSIS
-    # ==========================================================
-    print("\n" + "=" * 70)
-    print("                  MISSING VALUE ANALYSIS")
-    print("=" * 70)
+print("\n" + "=" * 90)
+print("                 MISSING VALUE ANALYSIS")
+print("=" * 90)
 
-    print("\nMissing Values Per Column:")
-    print(df.isnull().sum())
+missing_summary = pd.DataFrame({
+    "Missing Count": df.isnull().sum(),
+    "Missing Percentage (%)": df.isnull().mean() * 100,
+    "Available Count": df.notnull().sum()
+})
 
-    print("\nMissing Value Percentage:")
-    print((df.isnull().mean() * 100).round(2))
+missing_summary = missing_summary[
+    missing_summary["Missing Count"] > 0
+].sort_values(by="Missing Percentage (%)", ascending=False)
 
-    print("\nTotal Missing Values:")
-    print(df.isnull().sum().sum())
+if missing_summary.empty:
+    print("No missing values found.")
+else:
+    print(missing_summary.to_string())
 
-    print("\nTotal Complete Records:")
-    print(df.notnull().all(axis=1).sum())
+print(f"\nTotal Missing Cells: {df.isnull().sum().sum():,}")
+print(f"Columns With Missing Values: {df.isnull().any().sum()}")
+print(f"Columns Without Missing Values: {df.notnull().all().sum()}")
 
-    # ==========================================================
-    # 5. DUPLICATE ANALYSIS
-    # ==========================================================
-    print("\n" + "=" * 70)
-    print("                  DUPLICATE ANALYSIS")
-    print("=" * 70)
+# ==========================================
+# 5. DUPLICATE ANALYSIS
+# ==========================================
 
-    duplicate_count = df.duplicated().sum()
+print("\n" + "=" * 90)
+print("                 DUPLICATE ANALYSIS")
+print("=" * 90)
 
-    print("\nTotal Duplicate Records:")
-    print(duplicate_count)
+duplicate_count = df.duplicated().sum()
 
-    print("\nTotal Unique Records:")
-    print(len(df) - duplicate_count)
+print(f"Duplicate Records: {duplicate_count:,}")
+print(f"Unique Records: {len(df.drop_duplicates()):,}")
+print(f"Duplicate Percentage: {duplicate_count / len(df) * 100:.2f}%")
 
-    print("\nDuplicate Percentage:")
-    print(f"{(duplicate_count / len(df)) * 100:.2f}%")
+# ==========================================
+# 6. NUMERICAL FEATURE ANALYSIS
+# ==========================================
 
-    # ==========================================================
-    # 6. DESCRIPTIVE STATISTICS
-    # ==========================================================
-    print("\n" + "=" * 70)
-    print("                  DESCRIPTIVE STATISTICS")
-    print("=" * 70)
+print("\n" + "=" * 90)
+print("                 NUMERICAL FEATURE ANALYSIS")
+print("=" * 90)
 
-    print("\nNumerical Feature Statistics:")
-    print(df.describe(include=[np.number]).T)
+numerical_df = df.select_dtypes(include=np.number)
 
-    print("\nCategorical Feature Statistics:")
-    categorical = df.select_dtypes(include=["object", "category"])
+if not numerical_df.empty:
 
-    if not categorical.empty:
-        print(categorical.describe().T)
-    else:
-        print("No categorical columns available.")
+    print("\nStatistical Summary:")
+    print(numerical_df.describe().T.to_string())
 
-    # ==========================================================
-    # 7. UNIQUE VALUE ANALYSIS
-    # ==========================================================
-    print("\n" + "=" * 70)
-    print("                  UNIQUE VALUE ANALYSIS")
-    print("=" * 70)
+    numerical_summary = pd.DataFrame({
+        "Mean": numerical_df.mean(),
+        "Median": numerical_df.median(),
+        "Standard Deviation": numerical_df.std(),
+        "Minimum": numerical_df.min(),
+        "Maximum": numerical_df.max(),
+        "Skewness": numerical_df.skew(),
+        "Unique Values": numerical_df.nunique()
+    })
 
-    print("\nUnique Values Per Column:")
-    for col in df.columns:
-        print(f"{col}: {df[col].nunique(dropna=True)}")
+    print("\nDetailed Numerical Statistics:")
+    print(numerical_summary.to_string())
 
-    # ==========================================================
-    # 8. CONSTANT FEATURE ANALYSIS
-    # ==========================================================
-    print("\n" + "=" * 70)
-    print("                  CONSTANT FEATURE ANALYSIS")
-    print("=" * 70)
+# ==========================================
+# 7. CATEGORICAL FEATURE ANALYSIS
+# ==========================================
 
-    constant_columns = [
-        col for col in df.columns
-        if df[col].nunique(dropna=False) <= 1
+print("\n" + "=" * 90)
+print("                 CATEGORICAL FEATURE ANALYSIS")
+print("=" * 90)
+
+categorical_df = df.select_dtypes(
+    include=["object", "category", "bool"]
+)
+
+if not categorical_df.empty:
+
+    categorical_summary = pd.DataFrame({
+        "Unique Values": categorical_df.nunique(),
+        "Most Frequent Value": categorical_df.mode().iloc[0],
+        "Most Frequent Count": categorical_df.apply(
+            lambda x: x.value_counts().iloc[0]
+            if not x.value_counts().empty else 0
+        ),
+        "Missing Values": categorical_df.isnull().sum()
+    })
+
+    print(categorical_summary.to_string())
+
+    print("\nTop 10 Categories Per Feature:")
+
+    for column in categorical_df.columns:
+
+        print(f"\n--- {column} ---")
+
+        print(
+            categorical_df[column]
+            .value_counts(dropna=False)
+            .head(10)
+            .to_string()
+        )
+
+# ==========================================
+# 8. HIGH CARDINALITY ANALYSIS
+# ==========================================
+
+print("\n" + "=" * 90)
+print("                 HIGH CARDINALITY FEATURES")
+print("=" * 90)
+
+cardinality = pd.DataFrame({
+    "Unique Values": df.nunique(),
+    "Unique Percentage (%)": (
+        df.nunique() / len(df) * 100
+    ).round(2)
+})
+
+cardinality = cardinality.sort_values(
+    by="Unique Percentage (%)",
+    ascending=False
+)
+
+print(cardinality.to_string())
+
+# ==========================================
+# 9. CONSTANT AND LOW-VARIANCE FEATURES
+# ==========================================
+
+print("\n" + "=" * 90)
+print("                 CONSTANT FEATURES")
+print("=" * 90)
+
+constant_columns = [
+    col for col in df.columns
+    if df[col].nunique(dropna=False) <= 1
+]
+
+print("Constant Columns:", constant_columns)
+
+print("\nLow-Cardinality Features (2 or fewer unique values):")
+
+low_cardinality = [
+    col for col in df.columns
+    if df[col].nunique(dropna=True) <= 2
+]
+
+print(low_cardinality)
+
+# ==========================================
+# 10. OUTLIER ANALYSIS (IQR METHOD)
+# ==========================================
+
+print("\n" + "=" * 90)
+print("                 OUTLIER ANALYSIS")
+print("=" * 90)
+
+outlier_summary = []
+
+for col in numerical_df.columns:
+
+    series = numerical_df[col].dropna()
+
+    if series.nunique() <= 2:
+        continue
+
+    q1 = series.quantile(0.25)
+    q3 = series.quantile(0.75)
+
+    iqr = q3 - q1
+
+    lower_bound = q1 - 1.5 * iqr
+    upper_bound = q3 + 1.5 * iqr
+
+    outliers = (
+        (series < lower_bound) |
+        (series > upper_bound)
+    ).sum()
+
+    outlier_summary.append({
+        "Feature": col,
+        "Outlier Count": outliers,
+        "Outlier Percentage (%)": outliers / len(series) * 100,
+        "Lower Bound": lower_bound,
+        "Upper Bound": upper_bound
+    })
+
+outlier_df = pd.DataFrame(outlier_summary)
+
+if not outlier_df.empty:
+    print(
+        outlier_df.sort_values(
+            by="Outlier Percentage (%)",
+            ascending=False
+        ).to_string(index=False)
+    )
+
+# ==========================================
+# 11. CORRELATION ANALYSIS
+# ==========================================
+
+print("\n" + "=" * 90)
+print("                 NUMERICAL CORRELATION")
+print("=" * 90)
+
+if numerical_df.shape[1] >= 2:
+
+    correlation = numerical_df.corr(method="pearson")
+
+    print(correlation.to_string())
+
+    print("\nHighly Correlated Feature Pairs (|r| >= 0.80):")
+
+    upper_triangle = correlation.where(
+        np.triu(
+            np.ones(correlation.shape),
+            k=1
+        ).astype(bool)
+    )
+
+    high_corr = (
+        upper_triangle
+        .stack()
+        .reset_index()
+    )
+
+    high_corr.columns = [
+        "Feature 1", "Feature 2", "Correlation"
     ]
 
-    print("\nConstant Columns:")
-    print(constant_columns if constant_columns else "None")
+    high_corr = high_corr[
+        high_corr["Correlation"].abs() >= 0.80
+    ]
 
-    # ==========================================================
-    # 9. FINAL DATASET SUMMARY
-    # ==========================================================
-    print("\n" + "=" * 70)
-    print("                  FINAL DATASET SUMMARY")
-    print("=" * 70)
+    print(high_corr.to_string(index=False))
 
-    print(f"\nTotal Records        : {df.shape[0]:,}")
-    print(f"Total Features       : {df.shape[1]:,}")
-    print(f"Missing Values       : {df.isnull().sum().sum():,}")
-    print(f"Duplicate Records    : {duplicate_count:,}")
-    print(f"Numerical Features   : {df.select_dtypes(include=np.number).shape[1]}")
-    print(f"Categorical Features : {df.select_dtypes(include=['object', 'category']).shape[1]}")
-    print(f"Boolean Features     : {df.select_dtypes(include='bool').shape[1]}")
+# ==========================================
+# 12. FINAL DATASET SUMMARY
+# ==========================================
 
-    print("\n" + "=" * 70)
-    print("                  EDA COMPLETED")
-    print("=" * 70)
+print("\n" + "=" * 90)
+print("                 FINAL DATASET SUMMARY")
+print("=" * 90)
 
+print(f"""
+Total Rows                 : {df.shape[0]:,}
+Total Columns              : {df.shape[1]:,}
+Numerical Features         : {len(numerical_df.columns)}
+Categorical Features       : {len(categorical_df.columns)}
+Missing Values             : {df.isnull().sum().sum():,}
+Duplicate Rows             : {df.duplicated().sum():,}
+Constant Features          : {len(constant_columns)}
+Columns With Missing Data  : {df.isnull().any().sum()}
+Total Memory               : {df.memory_usage(deep=True).sum() / (1024**2):.2f} MB
+""")
 
-# ==============================================================
-# EXECUTE DATASET SUMMARY
-# ==============================================================
-DataSummary(df)
+print("=" * 90)
+print("             DATASET ANALYSIS COMPLETED")
+print("=" * 90)
