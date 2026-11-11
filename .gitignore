@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Data and trained models
+DataSet/*.csv
+*.cbm
+*.joblib
+
+# IDE and OS files
+.vscode/
+.DS_Store
+Thumbs.db
