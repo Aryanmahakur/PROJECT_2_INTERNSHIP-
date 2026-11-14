@@ -1,17 +1,29 @@
 # Python
 __pycache__/
 *.py[cod]
-*.egg-info/
-.venv/
+
+# Virtual environments
 venv/
+.venv/
 env/
 
-# Data and trained models
-DataSet/*.csv
-*.cbm
-*.joblib
+# Jupyter
+.ipynb_checkpoints/
 
-# IDE and OS files
+# VS Code
 .vscode/
-.DS_Store
-Thumbs.db
+
+# Environment secrets
+.env
+
+# Dataset and generated outputs
+Data/*.csv
+Data/plots/
+Data/joblib/
+
+# Saved machine-learning models
+*.joblib
+*.pkl
+
+# Temporary files
+*.log

@@ -1,0 +1,390 @@
+================================================================================
+EXPLORATORY DATA ANALYSIS REPORT
+File: combined.csv
+================================================================================
+
+1. DATASET SIZE
+--------------------------------------------------------------------------------
+Rows: 45,593
+Columns: 20
+Shape: (45593, 20)
+
+2. COLUMN NAMES
+--------------------------------------------------------------------------------
+1. Delivery_person_Age
+2. Delivery_person_Ratings
+3. Restaurant_latitude
+4. Restaurant_longitude
+5. Delivery_location_latitude
+6. Delivery_location_longitude
+7. Order_Date
+8. Time_Orderd
+9. Time_Order_picked
+10. Weatherconditions
+11. Road_traffic_density
+12. Vehicle_condition
+13. Type_of_order
+14. Type_of_vehicle
+15. multiple_deliveries
+16. Festival
+17. City
+18. Time_taken(min)
+19. Distance_KM
+20. Order_to_Pickup_Minutes
+
+3. DATASET INFORMATION
+--------------------------------------------------------------------------------
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 45593 entries, 0 to 45592
+Data columns (total 20 columns):
+ #   Column                       Non-Null Count  Dtype  
+---  ------                       --------------  -----  
+ 0   Delivery_person_Age          45593 non-null  object 
+ 1   Delivery_person_Ratings      45593 non-null  object 
+ 2   Restaurant_latitude          45593 non-null  float64
+ 3   Restaurant_longitude         45593 non-null  float64
+ 4   Delivery_location_latitude   45593 non-null  float64
+ 5   Delivery_location_longitude  45593 non-null  float64
+ 6   Order_Date                   45593 non-null  object 
+ 7   Time_Orderd                  45593 non-null  object 
+ 8   Time_Order_picked            45593 non-null  object 
+ 9   Weatherconditions            45593 non-null  object 
+ 10  Road_traffic_density         45593 non-null  object 
+ 11  Vehicle_condition            45593 non-null  int64  
+ 12  Type_of_order                45593 non-null  object 
+ 13  Type_of_vehicle              45593 non-null  object 
+ 14  multiple_deliveries          45593 non-null  object 
+ 15  Festival                     45593 non-null  object 
+ 16  City                         45593 non-null  object 
+ 17  Time_taken(min)              45593 non-null  object 
+ 18  Distance_KM                  45593 non-null  float64
+ 19  Order_to_Pickup_Minutes      43862 non-null  float64
+dtypes: float64(6), int64(1), object(13)
+memory usage: 7.0+ MB
+
+4. FIRST 5 ROWS
+--------------------------------------------------------------------------------
+Delivery_person_Age Delivery_person_Ratings  Restaurant_latitude  Restaurant_longitude  Delivery_location_latitude  Delivery_location_longitude Order_Date Time_Orderd Time_Order_picked     Weatherconditions Road_traffic_density  Vehicle_condition Type_of_order Type_of_vehicle multiple_deliveries Festival           City Time_taken(min)  Distance_KM  Order_to_Pickup_Minutes
+                 37                     4.9            22.745049             75.892471                   22.765049                    75.912471 19-03-2022    11:30:00          11:45:00      conditions Sunny                High                   2        Snack      motorcycle                    0      No          Urban         (min) 24     3.025149                     15.0
+                 34                     4.5            12.913041             77.683237                   13.043041                    77.813237 25-03-2022    19:45:00          19:50:00     conditions Stormy                 Jam                   2        Snack         scooter                    1      No  Metropolitian         (min) 33    20.183530                      5.0
+                 23                     4.4            12.914264             77.678400                   12.924264                    77.688400 19-03-2022    08:30:00          08:45:00 conditions Sandstorms                 Low                   0       Drinks      motorcycle                    1      No          Urban         (min) 26     1.552758                     15.0
+                 38                     4.7            11.003669             76.976494                   11.053669                    77.026494 05-04-2022    18:00:00          18:10:00      conditions Sunny              Medium                   0       Buffet      motorcycle                    1      No  Metropolitian         (min) 21     7.790401                     10.0
+                 32                     4.6            12.972793             80.249982                   13.012793                    80.289982 26-03-2022    13:30:00          13:45:00     conditions Cloudy                High                   1        Snack         scooter                    1      No  Metropolitian         (min) 30     6.210138                     15.0
+
+5. LAST 5 ROWS
+--------------------------------------------------------------------------------
+Delivery_person_Age Delivery_person_Ratings  Restaurant_latitude  Restaurant_longitude  Delivery_location_latitude  Delivery_location_longitude Order_Date Time_Orderd Time_Order_picked Weatherconditions Road_traffic_density  Vehicle_condition Type_of_order Type_of_vehicle multiple_deliveries Festival           City Time_taken(min)  Distance_KM  Order_to_Pickup_Minutes
+                 30                     4.8            26.902328             75.794257                   26.912328                    75.804257 24-03-2022    11:35:00          11:45:00  conditions Windy                High                   1         Meal      motorcycle                    0      No  Metropolitian         (min) 32     1.489846                     10.0
+                 21                     4.6             0.000000              0.000000                    0.070000                     0.070000 16-02-2022    19:55:00          20:10:00  conditions Windy                 Jam                   0       Buffet      motorcycle                    1      No  Metropolitian         (min) 36    11.007735                     15.0
+                 30                     4.9            13.022394             80.242439                   13.052394                    80.272439 11-03-2022    23:50:00          00:05:00 conditions Cloudy                 Low                   1       Drinks         scooter                    0      No  Metropolitian         (min) 16     4.657195                     15.0
+                 20                     4.7            11.001753             76.986241                   11.041753                    77.026241 07-03-2022    13:35:00          13:40:00 conditions Cloudy                High                   0        Snack      motorcycle                    1      No  Metropolitian         (min) 26     6.232393                      5.0
+                 23                     4.9            23.351058             85.325731                   23.431058                    85.405731 02-03-2022    17:10:00          17:15:00    conditions Fog              Medium                   2        Snack         scooter                    1      No  Metropolitian         (min) 36    12.074396                      5.0
+
+6. MISSING VALUES
+--------------------------------------------------------------------------------
+Delivery_person_Age               0
+Delivery_person_Ratings           0
+Restaurant_latitude               0
+Restaurant_longitude              0
+Delivery_location_latitude        0
+Delivery_location_longitude       0
+Order_Date                        0
+Time_Orderd                       0
+Time_Order_picked                 0
+Weatherconditions                 0
+Road_traffic_density              0
+Vehicle_condition                 0
+Type_of_order                     0
+Type_of_vehicle                   0
+multiple_deliveries               0
+Festival                          0
+City                              0
+Time_taken(min)                   0
+Distance_KM                       0
+Order_to_Pickup_Minutes        1731
+
+Total null values: 1,731
+
+7. DUPLICATE ROWS
+--------------------------------------------------------------------------------
+Total duplicate rows: 0
+
+8. UNIQUE VALUES PER COLUMN
+--------------------------------------------------------------------------------
+Delivery_person_Age              23
+Delivery_person_Ratings          29
+Restaurant_latitude             657
+Restaurant_longitude            518
+Delivery_location_latitude     4373
+Delivery_location_longitude    4373
+Order_Date                       44
+Time_Orderd                     177
+Time_Order_picked               193
+Weatherconditions                 7
+Road_traffic_density              5
+Vehicle_condition                 4
+Type_of_order                     4
+Type_of_vehicle                   4
+multiple_deliveries               5
+Festival                          3
+City                              4
+Time_taken(min)                  45
+Distance_KM                    4791
+Order_to_Pickup_Minutes           3
+
+9. STATISTICAL SUMMARY
+--------------------------------------------------------------------------------
+                               count unique             top   freq       mean          std        min        25%        50%        75%           max
+Delivery_person_Age            45593     23              35   2262        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Delivery_person_Ratings        45593     29             4.8   7148        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Restaurant_latitude          45593.0    NaN             NaN    NaN  17.017729     8.185109 -30.905562  12.933284  18.546947  22.728163     30.914057
+Restaurant_longitude         45593.0    NaN             NaN    NaN  70.231332    22.883647 -88.366217      73.17  75.898497  78.044095     88.433452
+Delivery_location_latitude   45593.0    NaN             NaN    NaN  17.465186     7.335122       0.01  12.988453  18.633934  22.785049     31.054057
+Delivery_location_longitude  45593.0    NaN             NaN    NaN  70.845702    21.118812       0.01      73.28  76.002574  78.107044     88.563452
+Order_Date                     45593     44      15-03-2022   1192        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Time_Orderd                    45593    177            NaN    1731        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Time_Order_picked              45593    193        21:30:00    496        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Weatherconditions              45593      7  conditions Fog   7654        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Road_traffic_density           45593      5            Low   15477        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Vehicle_condition            45593.0    NaN             NaN    NaN   1.023359     0.839065        0.0        0.0        1.0        2.0           3.0
+Type_of_order                  45593      4          Snack   11533        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Type_of_vehicle                45593      4     motorcycle   26435        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+multiple_deliveries            45593      5               1  28159        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Festival                       45593      3             No   44469        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+City                           45593      4  Metropolitian   34093        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Time_taken(min)                45593     45        (min) 26   2123        NaN          NaN        NaN        NaN        NaN        NaN           NaN
+Distance_KM                  45593.0    NaN             NaN    NaN  99.303911  1099.731281   1.465067   4.663493   9.264281  13.763977  19692.674606
+Order_to_Pickup_Minutes      43862.0    NaN             NaN    NaN   9.989399     4.087516        5.0        5.0       10.0       15.0          15.0
+
+10. TOP 10 VALUES IN EACH COLUMN
+--------------------------------------------------------------------------------
+
+COLUMN: Delivery_person_Age
+----------------------------------------
+Delivery_person_Age
+35    2262
+36    2260
+37    2227
+30    2226
+38    2219
+24    2210
+32    2202
+22    2196
+29    2191
+33    2187
+
+COLUMN: Delivery_person_Ratings
+----------------------------------------
+Delivery_person_Ratings
+4.8     7148
+4.7     7142
+4.9     7041
+4.6     6940
+5       3996
+4.5     3303
+NaN     1908
+4.1     1430
+4.2     1418
+4.3     1409
+
+COLUMN: Restaurant_latitude
+----------------------------------------
+Restaurant_latitude
+0.000000     3640
+26.911378     182
+26.914142     180
+26.902940     176
+26.902908     176
+26.892312     176
+26.888420     174
+26.905287     173
+26.913726     173
+26.913483     172
+
+COLUMN: Restaurant_longitude
+----------------------------------------
+Restaurant_longitude
+0.000000     3640
+75.789034     182
+75.805704     181
+75.793007     177
+75.806896     176
+75.792934     176
+75.752820     174
+75.800689     174
+75.794592     173
+73.167753     173
+
+COLUMN: Delivery_location_latitude
+----------------------------------------
+Delivery_location_latitude
+0.13    341
+0.02    337
+0.06    336
+0.09    336
+0.07    335
+0.04    335
+0.05    328
+0.11    328
+0.01    327
+0.08    324
+
+COLUMN: Delivery_location_longitude
+----------------------------------------
+Delivery_location_longitude
+0.13    341
+0.02    337
+0.06    336
+0.09    336
+0.07    335
+0.04    335
+0.05    328
+0.11    328
+0.01    327
+0.08    324
+
+COLUMN: Order_Date
+----------------------------------------
+Order_Date
+15-03-2022    1192
+03-04-2022    1178
+13-03-2022    1169
+26-03-2022    1166
+24-03-2022    1162
+09-03-2022    1159
+05-04-2022    1157
+05-03-2022    1154
+07-03-2022    1153
+03-03-2022    1150
+
+COLUMN: Time_Orderd
+----------------------------------------
+Time_Orderd
+NaN         1731
+21:55:00     461
+17:55:00     456
+20:00:00     449
+22:20:00     448
+21:35:00     446
+19:50:00     444
+21:15:00     442
+21:20:00     438
+22:45:00     438
+
+COLUMN: Time_Order_picked
+----------------------------------------
+Time_Order_picked
+21:30:00    496
+22:50:00    474
+22:40:00    458
+18:40:00    457
+21:45:00    456
+17:55:00    456
+22:25:00    455
+18:05:00    454
+20:50:00    453
+23:50:00    453
+
+COLUMN: Weatherconditions
+----------------------------------------
+Weatherconditions
+conditions Fog           7654
+conditions Stormy        7586
+conditions Cloudy        7536
+conditions Sandstorms    7495
+conditions Windy         7422
+conditions Sunny         7284
+conditions NaN            616
+
+COLUMN: Road_traffic_density
+----------------------------------------
+Road_traffic_density
+Low        15477
+Jam        14143
+Medium     10947
+High        4425
+NaN          601
+
+COLUMN: Vehicle_condition
+----------------------------------------
+Vehicle_condition
+2    15034
+1    15030
+0    15009
+3      520
+
+COLUMN: Type_of_order
+----------------------------------------
+Type_of_order
+Snack      11533
+Meal       11458
+Drinks     11322
+Buffet     11280
+
+COLUMN: Type_of_vehicle
+----------------------------------------
+Type_of_vehicle
+motorcycle           26435
+scooter              15276
+electric_scooter      3814
+bicycle                 68
+
+COLUMN: multiple_deliveries
+----------------------------------------
+multiple_deliveries
+1       28159
+0       14095
+2        1985
+NaN       993
+3         361
+
+COLUMN: Festival
+----------------------------------------
+Festival
+No      44469
+Yes       896
+NaN       228
+
+COLUMN: City
+----------------------------------------
+City
+Metropolitian     34093
+Urban             10136
+NaN                1200
+Semi-Urban          164
+
+COLUMN: Time_taken(min)
+----------------------------------------
+Time_taken(min)
+(min) 26    2123
+(min) 25    2050
+(min) 27    1976
+(min) 28    1965
+(min) 29    1956
+(min) 19    1824
+(min) 15    1810
+(min) 18    1765
+(min) 16    1706
+(min) 17    1696
+
+COLUMN: Distance_KM
+----------------------------------------
+Distance_KM
+20.442930    341
+3.145067     337
+9.435202     336
+14.152801    336
+6.290135     335
+11.007735    335
+17.297866    328
+7.862668     328
+1.572534     327
+12.580268    324
+
+COLUMN: Order_to_Pickup_Minutes
+----------------------------------------
+Order_to_Pickup_Minutes
+5.0     14703
+15.0    14610
+10.0    14549
+NaN      1731

@@ -1,0 +1,2 @@
+
+encoded_columns = encoder_one_hot.get_feature_names_out(one_hot_columns)
