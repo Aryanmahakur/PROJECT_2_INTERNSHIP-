@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delivery Time Estimation System</title>
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-panel: rgba(255, 255, 255, 0.96);
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --green: #16a34a;
+      --red: #dc2626;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.14);
+      --radius: 12px;
+    }
+
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
+    #map { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    #sidebar {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 400px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      z-index: 10;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h2 { font-size: 16px; margin: 0 0 4px 0; color: var(--text-main); }
+    .hint { font-size: 11px; color: var(--text-muted); margin: 0 0 4px 0; }
+    .input-group { display: flex; flex-direction: column; gap: 4px; }
+    .input-group label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+    .input-group input { padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; font-family: monospace; }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: var(--primary-hover); }
+
+    .results-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .result-row { display: flex; justify-content: space-between; font-weight: 600; color: var(--text-main); }
+    .sub-note { font-size: 11px; color: var(--text-muted); font-weight: normal; }
+    .highlight-total { color: var(--primary); font-size: 15px; font-weight: 800; border-top: 1px dashed #cbd5e1; padding-top: 6px; }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <div id="sidebar">
+    <h2>Delivery Time Predictor</h2>
+    <p class="hint">Drag the markers or edit coordinates below.</p>
+    
+    <div class="input-group">
+      <label>Restaurant Coordinates (lat, lng)</label>
+      <input type="text" id="restaurant-coords" value="12.9716, 77.5946" />
+    </div>
+
+    <div class="input-group">
+      <label>Customer Coordinates (lat, lng)</label>
+      <input type="text" id="customer-coords" value="12.9352, 77.6245" />
+    </div>
+
+    <button class="btn" onclick="calculateRouteAndPredict()">Calculate & Predict</button>
+
+    <div class="results-box">
+      <div class="result-row"><span>Distance:</span> <span id="res-distance">—</span></div>
+      <div class="result-row">
+        <span>Mapbox Travel Time:</span> 
+        <span id="res-mapbox-time">—</span>
+      </div>
+      <div class="result-row">
+        <span>
+          Model Prediction: 
+          <div class="sub-note">(Food Prep & Processing)</div>
+        </span> 
+        <span id="res-prep-time" style="color: #d97706;">—</span>
+      </div>
+      <div class="result-row highlight-total">
+        <span>Estimated Total Time:</span> 
+        <span id="res-total-time">—</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWFoYWt1cmFyeWFuIiwiYSI6ImNtd2praXgyNTA0dGMyeHM4Z3M1ZTRya3EifQ.Ajxe9WO0Pwn1LgDXHx5Tmw';
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [77.5946, 12.9716],
+      zoom: 12
+    });
+
+    const restMarker = new mapboxgl.Marker({ color: '#16a34a', draggable: true })
+      .setLngLat([77.5946, 12.9716]).addTo(map);
+
+    const custMarker = new mapboxgl.Marker({ color: '#dc2626', draggable: true })
+      .setLngLat([77.6245, 12.9352]).addTo(map);
+
+    restMarker.on('dragend', updateInputsFromMarkers);
+    custMarker.on('dragend', updateInputsFromMarkers);
+
+    function updateInputsFromMarkers() {
+      const rPos = restMarker.getLngLat();
+      const cPos = custMarker.getLngLat();
+      document.getElementById('restaurant-coords').value = `${rPos.lat.toFixed(4)}, ${rPos.lng.toFixed(4)}`;
+      document.getElementById('customer-coords').value = `${cPos.lat.toFixed(4)}, ${cPos.lng.toFixed(4)}`;
+    }
+
+    async function calculateRouteAndPredict() {
+      try {
+        const rVal = document.getElementById('restaurant-coords').value.split(',').map(s => parseFloat(s.trim()));
+        const cVal = document.getElementById('customer-coords').value.split(',').map(s => parseFloat(s.trim()));
+
+        if (rVal.length < 2 || cVal.length < 2 || isNaN(rVal[0]) || isNaN(cVal[0])) {
+          alert('Please enter valid coordinates.');
+          return;
+        }
+
+        restMarker.setLngLat([rVal[1], rVal[0]]);
+        custMarker.setLngLat([cVal[1], cVal[0]]);
+
+        // 1. Get Mapbox Directions API route & travel time
+        const mapboxUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${rVal[1]},${rVal[0]};${cVal[1]},${cVal[0]}?geometries=geojson&access_token=${mapboxgl.accessToken}`;
+        const mapboxRes = await fetch(mapboxUrl);
+        const mapboxData = await mapboxRes.json();
+
+        if (!mapboxData.routes || mapboxData.routes.length === 0) {
+          alert('No route found.');
+          return;
+        }
+
+        const route = mapboxData.routes[0];
+        const distanceKm = route.distance / 1000;
+        const mapboxTravelMins = route.duration / 60; // Keep exact float for addition
+
+        document.getElementById('res-distance').textContent = `${distanceKm.toFixed(2)} km`;
+        document.getElementById('res-mapbox-time').textContent = `${Math.round(mapboxTravelMins)} mins`;
+
+        // Draw path on map
+        const geojson = { type: 'Feature', properties: {}, geometry: route.geometry };
+        if (map.getSource('route')) {
+          map.getSource('route').setData(geojson);
+        } else {
+          map.addLayer({
+            id: 'route',
+            type: 'line',
+            source: { type: 'geojson', data: geojson },
+            layout: { 'line-join': 'round', 'line-cap': 'round' },
+            paint: { 'line-color': '#2563eb', 'line-width': 5 }
+          });
+        }
+
+        const bounds = new mapboxgl.LngLatBounds();
+        route.geometry.coordinates.forEach(coord => bounds.extend(coord));
+        map.fitBounds(bounds, { padding: 60, maxZoom: 15 });
+
+        // 2. Call FastAPI backend for Random Forest model prediction (Food Prep Time)
+        const mlRes = await fetch('http://127.0.0.1:8000/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            restaurant_lat: rVal[0],
+            restaurant_lng: rVal[1],
+            customer_lat: cVal[0],
+            customer_lng: cVal[1],
+            distance_km: distanceKm
+          })
+        });
+
+        if (!mlRes.ok) throw new Error('Backend error');
+
+        const mlData = await mlRes.json();
+        const prepMins = mlData.prep_time_minutes;
+
+        document.getElementById('res-prep-time').textContent = `${Math.round(prepMins)} mins`;
+
+        // 3. Combine both to show total delivery time
+        const totalEstimatedMins = Math.round(mapboxTravelMins + prepMins);
+        document.getElementById('res-total-time').textContent = `${totalEstimatedMins} mins`;
+
+      } catch (err) {
+        console.error(err);
+        alert('Connection error. Ensure your FastAPI server is running.');
+      }
+    }
+  </script>
+</body>
+</html>
