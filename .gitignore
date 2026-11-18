@@ -27,3 +27,16 @@ Data/joblib/
 
 # Temporary files
 *.log
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+
+# Environment variables
+.env
+.env.local
+
+# Logs and OS files
+npm-debug.log*
+.DS_Store
