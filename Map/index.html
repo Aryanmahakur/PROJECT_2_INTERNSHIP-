@@ -3,118 +3,730 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Delivery Time Estimation System</title>
+  <title>Deliver it — Delivery Time Estimation System</title>
 
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet" />
 
   <style>
     :root {
-      --bg-panel: rgba(255, 255, 255, 0.96);
+      --bg-page: #ffffff;
+      --bg-soft: #f8fafc;
       --border: #e2e8f0;
       --text-main: #0f172a;
       --text-muted: #64748b;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
+      --purple: #7c3aed;
+      --indigo: #4f46e5;
+      --amber: #ffb703;
+      --amber-hover: #ffaa00;
       --green: #16a34a;
       --red: #dc2626;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.14);
-      --radius: 12px;
+      --shadow: 0 14px 32px -8px rgba(15, 23, 42, 0.12);
     }
 
-    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
-    #map { position: absolute; inset: 0; width: 100%; height: 100%; }
+    * {
+      box-sizing: border-box;
+    }
 
-    #sidebar {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      width: 400px;
-      background: var(--bg-panel);
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    /* Hide Mapbox logo & attribution controls on the map */
+    .mapboxgl-ctrl-logo,
+    .mapboxgl-ctrl-attrib {
+      display: none !important;
+    }
+
+    /* ================= FLOATING HEADER ================= */
+    .header-wrap {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      max-width: 1280px;
+      margin: 12px auto 0;
+      padding: 0 24px;
+    }
+
+    .header-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1px solid rgba(216, 180, 254, 0.65);
+      border-radius: 9999px;
+      padding: 12px 24px;
+      box-shadow: 0 18px 32px -12px rgba(88, 28, 135, 0.08);
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      width: 28px;
+      height: 28px;
+    }
+
+    .logo-grid span:nth-child(1) { background: #9333ea; border-radius: 2px; }
+    .logo-grid span:nth-child(2) { background: #fbbf24; border-radius: 2px; }
+    .logo-grid span:nth-child(3) { background: #a855f7; border-radius: 2px; }
+    .logo-grid span:nth-child(4) { background: #f59e0b; border-radius: 2px; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .nav-links a,
+    .nav-links span {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links span:hover {
+      color: var(--purple);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .header-muted-link {
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+      transition: color 0.15s ease;
+    }
+
+    .header-muted-link:hover {
+      color: var(--text-main);
+    }
+
+    .trial-pill {
+      text-decoration: none;
+      background: var(--amber);
+      color: #020617;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      box-shadow: 0 8px 18px -6px rgba(245, 158, 11, 0.35);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .trial-pill:hover {
+      background: var(--amber-hover);
+      transform: scale(1.02);
+    }
+
+    .trial-pill:active {
+      transform: scale(0.96);
+    }
+
+    /* ================= COMPACT HERO ================= */
+    .hero {
+      max-width: 1280px;
+      margin: 26px auto 18px;
+      padding: 0 24px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--text-main);
+    }
+
+    .hero h1 .grad {
+      background: linear-gradient(90deg, #9333ea, #4f46e5, #f59e0b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero .inspiration-note {
+      display: inline-block;
+      margin: 12px auto 0;
+      font-size: 13.5px;
+      line-height: 1.5;
+      white-space: nowrap;
+      color: #475569;
+      background: #faf5ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 9999px;
+      padding: 8px 16px;
+    }
+
+    .hero .inspiration-note strong {
+      color: var(--purple);
+    }
+
+    /* ================= EQUAL 50/50 SPLIT: INPUT SIDE & MAP SIDE ================= */
+    .workbench-section {
+      max-width: 1280px;
+      margin: 0 auto 36px;
+      padding: 0 24px;
+    }
+
+    .workbench-shell {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: stretch;
+      background: linear-gradient(180deg, #ffffff 0%, rgba(243, 232, 255, 0.25) 55%, rgba(248, 250, 252, 0.9) 100%);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 24px;
+      padding: 20px;
       box-shadow: var(--shadow);
-      z-index: 10;
-      padding: 16px;
+    }
+
+    .panel-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 4px 16px -4px rgba(15, 23, 42, 0.06);
+    }
+
+    .punny-prompt {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 700;
+      color: #92400e;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mode-switch {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .mode-tab {
+      border: none;
+      background: transparent;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mode-tab.active {
+      background: #ffffff;
+      color: var(--purple);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    .reset-btn {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 10px;
+      transition: background 0.15s ease, color 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .reset-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .mode-pane {
+      display: none;
+    }
+
+    .mode-pane.active {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    h2 { font-size: 16px; margin: 0 0 4px 0; color: var(--text-main); }
-    .hint { font-size: 11px; color: var(--text-muted); margin: 0 0 4px 0; }
-    .input-group { display: flex; flex-direction: column; gap: 4px; }
-    .input-group label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
-    .input-group input { padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; font-family: monospace; }
-
-    .btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      transition: background 0.15s;
-    }
-    .btn:hover { background: var(--primary-hover); }
-
-    .results-box {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
+    .input-stack {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .input-group label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .input-group input,
+    .input-group select {
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--text-main);
+      background: #f8fafc;
+      outline: none;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .input-group input {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: var(--purple);
+      background: #ffffff;
+    }
+
+    .btn {
+      background: var(--amber);
+      color: #020617;
+      border: none;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 10px 20px -8px rgba(245, 158, 11, 0.45);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .btn:hover {
+      background: var(--amber-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .results-box {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
       font-size: 13px;
     }
-    .result-row { display: flex; justify-content: space-between; font-weight: 600; color: var(--text-main); }
-    .sub-note { font-size: 11px; color: var(--text-muted); font-weight: normal; }
-    .highlight-total { color: var(--primary); font-size: 15px; font-weight: 800; border-top: 1px dashed #cbd5e1; padding-top: 6px; }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .path-value {
+      text-align: right;
+      font-weight: 700;
+      color: var(--indigo);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .sub-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: normal;
+    }
+
+    .highlight-total {
+      color: var(--purple);
+      font-size: 15px;
+      font-weight: 800;
+      border-top: 1px dashed #cbd5e1;
+      padding-top: 8px;
+      align-items: center;
+    }
+
+    .map-card {
+      position: relative;
+      min-height: 460px;
+      height: 100%;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: #eef2ff;
+      box-shadow: 0 4px 16px -4px rgba(15, 23, 42, 0.06);
+    }
+
+    #map {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-legend {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    .dot-green {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background: var(--green);
+      display: inline-block;
+    }
+
+    .dot-red {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background: var(--red);
+      display: inline-block;
+    }
+
+    /* ================= STRONG SCROLL ANIMATIONS ================= */
+    @keyframes heroEnterStrong {
+      0% {
+        opacity: 0.05;
+        transform: translate3d(0, 36px, 0) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    .hero-anim-1 {
+      animation: heroEnterStrong 780ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-anim-2 {
+      animation: heroEnterStrong 820ms cubic-bezier(0.16, 1, 0.3, 1) 140ms both;
+    }
+
+    .reveal-up {
+      opacity: 0.06;
+      transform: translate3d(0, 48px, 0);
+      transition: opacity 680ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-left {
+      opacity: 0.05;
+      transform: translate3d(-64px, 0, 0);
+      transition: opacity 680ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-right {
+      opacity: 0.05;
+      transform: translate3d(64px, 0, 0);
+      transition: opacity 680ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-pop {
+      opacity: 0.05;
+      transform: translate3d(0, 28px, 0) scale(0.92);
+      transition: opacity 720ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .is-revealed {
+      opacity: 1 !important;
+      transform: translate3d(0, 0, 0) scale(1) !important;
+    }
+
+    footer {
+      border-top: 1px solid #f1f5f9;
+      background: #ffffff;
+      padding: 20px 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 1120px) {
+      .hero .inspiration-note {
+        white-space: normal;
+        border-radius: 16px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .nav-links,
+      .header-muted-link {
+        display: none;
+      }
+      .workbench-shell {
+        grid-template-columns: 1fr;
+      }
+      .map-card {
+        height: 380px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div id="map"></div>
+  <!-- ================= FLOATING HEADER ================= -->
+  <header class="header-wrap">
+    <div class="header-pill">
+      <a href="#top" class="logo-link">
+        <span class="logo-grid">
+          <span></span><span></span><span></span><span></span>
+        </span>
+        <span>Deliver it</span>
+      </a>
 
-  <div id="sidebar">
-    <h2>Delivery Time Predictor</h2>
-    <p class="hint">Drag the markers or edit coordinates below.</p>
-    
-    <div class="input-group">
-      <label>Restaurant Coordinates (lat, lng)</label>
-      <input type="text" id="restaurant-coords" value="12.9716, 77.5946" />
-    </div>
+      <nav class="nav-links">
+        <span>Capabilities ▾</span>
+        <span>Sectors ▾</span>
+        <a href="#predictor">Plans</a>
+        <a href="#predictor">About us</a>
+      </nav>
 
-    <div class="input-group">
-      <label>Customer Coordinates (lat, lng)</label>
-      <input type="text" id="customer-coords" value="12.9352, 77.6245" />
-    </div>
-
-    <button class="btn" onclick="calculateRouteAndPredict()">Calculate & Predict</button>
-
-    <div class="results-box">
-      <div class="result-row"><span>Distance:</span> <span id="res-distance">—</span></div>
-      <div class="result-row">
-        <span>Mapbox Travel Time:</span> 
-        <span id="res-mapbox-time">—</span>
-      </div>
-      <div class="result-row">
-        <span>
-          Model Prediction: 
-          <div class="sub-note">(Food Prep & Processing)</div>
-        </span> 
-        <span id="res-prep-time" style="color: #d97706;">—</span>
-      </div>
-      <div class="result-row highlight-total">
-        <span>Estimated Total Time:</span> 
-        <span id="res-total-time">—</span>
+      <div class="header-actions">
+        <span class="header-muted-link">Sign in ▾</span>
+        <a href="#predictor" class="header-muted-link">Book a demo</a>
+        <a href="#predictor" class="trial-pill">Start free trial</a>
       </div>
     </div>
-  </div>
+  </header>
+
+  <!-- ================= COMPACT HERO ================= -->
+  <section id="top" class="hero">
+    <h1 class="hero-anim-1">
+      Predict real delivery time along <span class="grad">every delivery path</span>
+    </h1>
+    <p class="inspiration-note hero-anim-2">
+      <strong>Do you know who uses route optimization models ?</strong> Leaders like <strong>Zomato</strong>, <strong>Domino's</strong>, and <strong>Swiggy</strong>—plus <strong>Uber Eats</strong> and <strong>DoorDash</strong>—rely on smart routing, and we are inspired from them.
+    </p>
+  </section>
+
+  <!-- ================= EQUAL 50/50 SPLIT: INPUT SIDE & MAP SIDE ================= -->
+  <section id="predictor" class="workbench-section">
+    <div class="workbench-shell reveal-pop">
+      <!-- Left Half: Input & Prediction -->
+      <div class="panel-card reveal-left">
+        <div class="input-stack">
+          <div class="punny-prompt" role="note">
+            Hot hot hot—feed the model some inputs before the fries get cold.
+          </div>
+
+          <!-- Top Two-Option Switcher -->
+          <div class="top-bar">
+            <div class="mode-switch" role="tablist" aria-label="Coordinate input mode">
+              <button
+                type="button"
+                id="tab-custom"
+                class="mode-tab"
+                role="tab"
+                aria-selected="false"
+                onclick="switchMode('custom')"
+              >
+                Custom Coordinates
+              </button>
+              <button
+                type="button"
+                id="tab-registered"
+                class="mode-tab active"
+                role="tab"
+                aria-selected="true"
+                onclick="switchMode('registered')"
+              >
+                Registered Locations
+              </button>
+            </div>
+            <button type="button" class="reset-btn" onclick="resetCoords()">Reset</button>
+          </div>
+
+          <!-- Option 1: Give Coordinates Yourself -->
+          <div id="pane-custom" class="mode-pane">
+            <div class="input-group">
+              <label for="restaurant-coords">Restaurant Coordinates (lat, lng)</label>
+              <input type="text" id="restaurant-coords" value="30.7398, 76.7827" />
+            </div>
+
+            <div class="input-group">
+              <label for="customer-coords">Flat / Home Coordinates (lat, lng)</label>
+              <input type="text" id="customer-coords" value="30.7333, 76.7794" />
+            </div>
+          </div>
+
+          <!-- Option 2: 15 Chandigarh Restaurants & 15 Flats -->
+          <div id="pane-registered" class="mode-pane active">
+            <div class="input-group">
+              <label for="registered-restaurant">Registered Restaurant </label>
+              <select id="registered-restaurant" onchange="applyRegisteredSelection()">
+                <option value="30.7398, 76.7827" selected>Ghazal Restaurant — Sector 17</option>
+                <option value="30.7345, 76.7752">Chawlas 2 Dhaba — Sector 22</option>
+                <option value="30.7524, 76.7875">Katani Dhaba — Sector 8</option>
+                <option value="30.7258, 76.7684">Amritsari Zaika — Sector 37</option>
+                <option value="30.7462, 76.7918">Buffet Hut — Sector 9</option>
+                <option value="30.7289, 76.7745">Anpurna Rasoi — Sector 32</option>
+                <option value="30.7376, 76.7662">Amu Rasoi — Sector 23</option>
+                <option value="30.7489, 76.7782">Goldies Roost — Sector 8B</option>
+                <option value="30.7318, 76.7812">City Heart 2 — Sector 22B</option>
+                <option value="30.7224, 76.7788">Khalbelly Restaurant — Sector 33</option>
+                <option value="30.7354, 76.7860">Jeet Chinese Food — Sector 19</option>
+                <option value="30.7272, 76.7615">Kumar Rasoi — Sector 37C</option>
+                <option value="30.7445, 76.7852">Icon Kitchen — Sector 8C</option>
+                <option value="30.7305, 76.7640">Dil Desi — Sector 32D</option>
+                <option value="30.7382, 76.7718">20-20 Punjabi Restaurant — Sector 22D</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="registered-flat">Registered Residence </label>
+              <select id="registered-flat" onchange="applyRegisteredSelection()">
+                <option value="30.7333, 76.7794" selected>Shivalik Enclave Flats — Sector 22</option>
+                <option value="30.7415, 76.7895">Rosewood Apartments — Sector 16</option>
+                <option value="30.7265, 76.7720">Sukanya Residency Flats — Sector 35</option>
+                <option value="30.7480, 76.7950">Sukhna View Flats — Sector 7</option>
+                <option value="30.7210, 76.7655">Green Valley Flats — Sector 38</option>
+                <option value="30.7535, 76.7820">Panchsheel Heights — Sector 10</option>
+                <option value="30.7295, 76.7865">Aroma Greens Flats — Sector 20</option>
+                <option value="30.7185, 76.7740">Harmony Residency — Sector 44</option>
+                <option value="30.7432, 76.7725">Kailash Enclave Flats — Sector 15</option>
+                <option value="30.7248, 76.7842">Silver Oak Flats — Sector 34</option>
+                <option value="30.7502, 76.7710">Tagore Garden Flats — Sector 11</option>
+                <option value="30.7165, 76.7815">Lotus Towers Flats — Sector 46</option>
+                <option value="30.7368, 76.7928">Citi Crown Flats — Sector 18</option>
+                <option value="30.7198, 76.7605">Vrindavan Flats — Sector 42</option>
+                <option value="30.7458, 76.7665">Oakwood Chambers — Sector 14</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="btn" onclick="calculateRouteAndPredict()">
+            Calculate &amp; Predict
+          </button>
+        </div>
+
+        <div class="results-box">
+          <div class="result-row">
+            <span>Best Path:</span>
+            <span id="res-best-path" class="path-value">
+              Ghazal Restaurant — Sector 17 → Shivalik Enclave Flats — Sector 22
+            </span>
+          </div>
+          <div class="result-row">
+            <span>Distance:</span>
+            <span id="res-distance">—</span>
+          </div>
+          <div class="result-row">
+            <span>Mapbox Travel Time:</span>
+            <span id="res-mapbox-time">—</span>
+          </div>
+          <div class="result-row">
+            <span>
+              Model Prediction:
+              <div class="sub-note">(Food Prep &amp; Processing)</div>
+            </span>
+            <span id="res-prep-time" style="color: #d97706;">—</span>
+          </div>
+          <div class="result-row highlight-total">
+            <span>Estimated Time to Delivery (Total Time):</span>
+            <span id="res-total-time">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Half: Mapbox Map -->
+      <div class="map-card reveal-right">
+        <div class="map-legend">
+          <span><i class="dot-green"></i> Restaurant</span>
+          <span><i class="dot-red"></i> Flat</span>
+          <span>•</span>
+          <span style="color: #7c3aed;">Best Path</span>
+        </div>
+        <div id="map"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="reveal-up">
+    <div>&copy; 2026 Deliver it. All rights reserved.</div>
+    <div style="margin-top: 4px;">Reliable routing and dispatch for delivery partners.</div>
+  </footer>
 
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibWFoYWt1cmFyeWFuIiwiYSI6ImNtd2praXgyNTA0dGMyeHM4Z3M1ZTRya3EifQ.Ajxe9WO0Pwn1LgDXHx5Tmw';
@@ -122,28 +734,101 @@
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v12',
-      center: [77.5946, 12.9716],
-      zoom: 12
+      center: [76.7794, 30.7333],
+      zoom: 12.5
     });
 
     const restMarker = new mapboxgl.Marker({ color: '#16a34a', draggable: true })
-      .setLngLat([77.5946, 12.9716]).addTo(map);
+      .setLngLat([76.7827, 30.7398])
+      .addTo(map);
 
     const custMarker = new mapboxgl.Marker({ color: '#dc2626', draggable: true })
-      .setLngLat([77.6245, 12.9352]).addTo(map);
+      .setLngLat([76.7794, 30.7333])
+      .addTo(map);
 
     restMarker.on('dragend', updateInputsFromMarkers);
     custMarker.on('dragend', updateInputsFromMarkers);
 
+    function switchMode(mode) {
+      const isCustom = mode === 'custom';
+      document.getElementById('tab-custom').classList.toggle('active', isCustom);
+      document.getElementById('tab-custom').setAttribute('aria-selected', String(isCustom));
+      document.getElementById('tab-registered').classList.toggle('active', !isCustom);
+      document.getElementById('tab-registered').setAttribute('aria-selected', String(!isCustom));
+
+      document.getElementById('pane-custom').classList.toggle('active', isCustom);
+      document.getElementById('pane-registered').classList.toggle('active', !isCustom);
+
+      if (!isCustom) {
+        applyRegisteredSelection();
+      } else {
+        updateCustomPathLabel();
+      }
+    }
+
+    function applyRegisteredSelection() {
+      const restSelect = document.getElementById('registered-restaurant');
+      const flatSelect = document.getElementById('registered-flat');
+      const rCoord = restSelect.value;
+      const cCoord = flatSelect.value;
+
+      document.getElementById('restaurant-coords').value = rCoord;
+      document.getElementById('customer-coords').value = cCoord;
+
+      const rName = restSelect.options[restSelect.selectedIndex].text;
+      const cName = flatSelect.options[flatSelect.selectedIndex].text;
+      document.getElementById('res-best-path').textContent = `${rName} → ${cName}`;
+
+      const rVal = rCoord.split(',').map(s => parseFloat(s.trim()));
+      const cVal = cCoord.split(',').map(s => parseFloat(s.trim()));
+      if (rVal.length >= 2 && !isNaN(rVal[0]) && !isNaN(rVal[1])) {
+        restMarker.setLngLat([rVal[1], rVal[0]]);
+      }
+      if (cVal.length >= 2 && !isNaN(cVal[0]) && !isNaN(cVal[1])) {
+        custMarker.setLngLat([cVal[1], cVal[0]]);
+      }
+    }
+
+    function updateCustomPathLabel() {
+      const rStr = document.getElementById('restaurant-coords').value.trim();
+      const cStr = document.getElementById('customer-coords').value.trim();
+      document.getElementById('res-best-path').textContent = `Restaurant (${rStr}) → Flat (${cStr})`;
+    }
+
     function updateInputsFromMarkers() {
       const rPos = restMarker.getLngLat();
       const cPos = custMarker.getLngLat();
-      document.getElementById('restaurant-coords').value = `${rPos.lat.toFixed(4)}, ${rPos.lng.toFixed(4)}`;
-      document.getElementById('customer-coords').value = `${cPos.lat.toFixed(4)}, ${cPos.lng.toFixed(4)}`;
+      const rStr = `${rPos.lat.toFixed(4)}, ${rPos.lng.toFixed(4)}`;
+      const cStr = `${cPos.lat.toFixed(4)}, ${cPos.lng.toFixed(4)}`;
+      document.getElementById('restaurant-coords').value = rStr;
+      document.getElementById('customer-coords').value = cStr;
+
+      const isRegistered = document.getElementById('pane-registered').classList.contains('active');
+      if (!isRegistered) {
+        updateCustomPathLabel();
+      }
+    }
+
+    function resetCoords() {
+      document.getElementById('registered-restaurant').selectedIndex = 0;
+      document.getElementById('registered-flat').selectedIndex = 0;
+      document.getElementById('restaurant-coords').value = '30.7398, 76.7827';
+      document.getElementById('customer-coords').value = '30.7333, 76.7794';
+      document.getElementById('res-best-path').textContent =
+        'Ghazal Restaurant — Sector 17 → Shivalik Enclave Flats — Sector 22';
+      restMarker.setLngLat([76.7827, 30.7398]);
+      custMarker.setLngLat([76.7794, 30.7333]);
     }
 
     async function calculateRouteAndPredict() {
       try {
+        const isRegistered = document.getElementById('pane-registered').classList.contains('active');
+        if (isRegistered) {
+          applyRegisteredSelection();
+        } else {
+          updateCustomPathLabel();
+        }
+
         const rVal = document.getElementById('restaurant-coords').value.split(',').map(s => parseFloat(s.trim()));
         const cVal = document.getElementById('customer-coords').value.split(',').map(s => parseFloat(s.trim()));
 
@@ -167,12 +852,11 @@
 
         const route = mapboxData.routes[0];
         const distanceKm = route.distance / 1000;
-        const mapboxTravelMins = route.duration / 60; // Keep exact float for addition
+        const mapboxTravelMins = route.duration / 60;
 
         document.getElementById('res-distance').textContent = `${distanceKm.toFixed(2)} km`;
         document.getElementById('res-mapbox-time').textContent = `${Math.round(mapboxTravelMins)} mins`;
 
-        // Draw path on map
         const geojson = { type: 'Feature', properties: {}, geometry: route.geometry };
         if (map.getSource('route')) {
           map.getSource('route').setData(geojson);
@@ -182,7 +866,7 @@
             type: 'line',
             source: { type: 'geojson', data: geojson },
             layout: { 'line-join': 'round', 'line-cap': 'round' },
-            paint: { 'line-color': '#2563eb', 'line-width': 5 }
+            paint: { 'line-color': '#7c3aed', 'line-width': 5 }
           });
         }
 
@@ -210,15 +894,27 @@
 
         document.getElementById('res-prep-time').textContent = `${Math.round(prepMins)} mins`;
 
-        // 3. Combine both to show total delivery time
         const totalEstimatedMins = Math.round(mapboxTravelMins + prepMins);
         document.getElementById('res-total-time').textContent = `${totalEstimatedMins} mins`;
-
       } catch (err) {
         console.error(err);
         alert('Connection error. Ensure your FastAPI server is running.');
       }
     }
+
+    const revealTargets = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-pop');
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -16px 0px' }
+    );
+    revealTargets.forEach((el) => io.observe(el));
   </script>
 </body>
 </html>
