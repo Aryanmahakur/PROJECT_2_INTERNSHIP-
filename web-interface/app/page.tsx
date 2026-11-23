@@ -415,8 +415,9 @@ export default function Home() {
 
           <nav className="hidden items-center gap-8 text-sm font-semibold text-slate-700 md:flex">
             <div className="flex cursor-pointer items-center gap-1 transition-colors hover:text-purple-600">
-              <span>Capabilities</span>
-              <ChevronDown className="h-4 w-4 text-slate-400" />
+             <Link href="/capabilities" className="transition-colors hover:text-purple-600">
+  Capabilities
+</Link>
             </div>
             <div className="flex cursor-pointer items-center gap-1 transition-colors hover:text-purple-600">
               <span>Sectors</span>
@@ -473,11 +474,11 @@ export default function Home() {
           </Link>
 
           <Link
-            href="/demo"
-            className="w-full rounded-xl border border-slate-300 bg-white px-7 py-4 text-center text-sm font-semibold text-slate-700 shadow-xs transition-all hover:bg-slate-50 hover:text-slate-900 active:scale-95 sm:w-auto sm:text-base"
-          >
-            Book a demo
-          </Link>
+              href="/demo"
+              className="hidden text-sm font-semibold text-slate-700 transition-colors hover:text-slate-900 sm:inline-block"
+            >
+              Book a demo
+            </Link>
         </div>
 
         <p className="hero-stagger-3 mt-4 text-xs font-medium text-slate-500">
@@ -1574,10 +1575,10 @@ export default function Home() {
             </div>
 
             <div className="flex shrink-0 flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/demo"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#ffb703] px-6 py-3.5 text-sm font-bold text-slate-950 shadow-md transition-all hover:scale-[1.02] hover:bg-[#ffaa00] active:scale-95"
-              >
+             <Link
+            href="/demo"
+            className="w-full rounded-xl border border-slate-300 bg-white px-7 py-4 text-center text-sm font-semibold text-slate-700 shadow-xs transition-all hover:bg-slate-50 hover:text-slate-900 active:scale-95 sm:w-auto sm:text-base"
+          >
                 <span>Get the demo</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
