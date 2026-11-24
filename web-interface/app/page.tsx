@@ -9,10 +9,13 @@ import {
   Check,
   ShieldAlert,
   ChevronDown,
-  Navigation,
   MapPin,
-} from 'lucide-react';
-
+  Clock3,
+  Truck,
+  PackageCheck,
+  MapPinned,
+  Navigation,
+} from "lucide-react";
 type IndustryItem = {
   id: string;
   title: string;
@@ -292,67 +295,358 @@ const DISPATCH_ROUTES: RoutePlan[] = [
   },
 ];
 
-function BrandLogosGroup({ ariaHidden = false }: { ariaHidden?: boolean }) {
+function BrandLogosGroup({
+  ariaHidden = false,
+  dark = false,
+}: {
+  ariaHidden?: boolean;
+  dark?: boolean;
+}) {
+  const main = dark ? 'text-white' : 'text-slate-900';
+  const muted = dark ? 'text-slate-400' : 'text-slate-500';
+  const soft = dark ? 'text-slate-300' : 'text-slate-700';
+  const border = dark ? 'border-white' : 'border-slate-900';
+
   return (
     <div
       aria-hidden={ariaHidden}
       className="flex shrink-0 items-center gap-14 pr-14 sm:gap-20 sm:pr-20"
     >
-      <div className="flex h-11 shrink-0 items-center justify-center opacity-85 transition-opacity hover:opacity-100">
-        <span className="font-serif text-2xl font-black tracking-tight text-slate-900">
+      <div className="flex h-11 shrink-0 items-center justify-center opacity-90 transition-opacity hover:opacity-100">
+        <span className={`font-serif text-2xl font-black tracking-tight ${main}`}>
           KFC
         </span>
       </div>
 
-      <div className="flex h-11 shrink-0 flex-col items-center justify-center leading-none opacity-85 transition-opacity hover:opacity-100">
-        <span className="text-xs font-extrabold tracking-tight text-slate-900">
+      <div className="flex h-11 shrink-0 flex-col items-center justify-center leading-none opacity-90 transition-opacity hover:opacity-100">
+        <span className={`text-xs font-extrabold tracking-tight ${main}`}>
           Little
         </span>
-        <span className="text-sm font-black tracking-tight text-slate-900">
+        <span className={`text-sm font-black tracking-tight ${main}`}>
           Caesars
         </span>
       </div>
 
-      <div className="flex h-11 shrink-0 items-center justify-center opacity-85 transition-opacity hover:opacity-100">
-        <span className="text-sm font-black uppercase tracking-wider text-slate-900 sm:text-base">
+      <div className="flex h-11 shrink-0 items-center justify-center opacity-90 transition-opacity hover:opacity-100">
+        <span
+          className={`text-sm font-black uppercase tracking-wider sm:text-base ${main}`}
+        >
           PAPA JOHNS
         </span>
       </div>
 
-      <div className="flex h-11 shrink-0 items-center justify-center opacity-85 transition-opacity hover:opacity-100">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-slate-900 text-xs font-bold tracking-tight text-slate-900">
+      <div className="flex h-11 shrink-0 items-center justify-center opacity-90 transition-opacity hover:opacity-100">
+        <div
+          className={`flex h-10 w-10 items-center justify-center rounded-full border-2 text-xs font-bold tracking-tight ${border} ${main}`}
+        >
           chip
         </div>
       </div>
 
-      <div className="flex h-11 shrink-0 flex-col items-center justify-center leading-none opacity-85 transition-opacity hover:opacity-100">
-        <span className="font-serif text-lg font-extrabold tracking-widest text-slate-900">
+      <div className="flex h-11 shrink-0 flex-col items-center justify-center leading-none opacity-90 transition-opacity hover:opacity-100">
+        <span className={`font-serif text-lg font-extrabold tracking-widest ${main}`}>
           SAGE
         </span>
-        <span className="mt-0.5 whitespace-nowrap text-[9px] font-medium tracking-tight text-slate-500">
+        <span
+          className={`mt-0.5 whitespace-nowrap text-[9px] font-medium tracking-tight ${muted}`}
+        >
           a plant based bistro &amp; brewery
         </span>
       </div>
 
-      <div className="flex h-11 shrink-0 items-center justify-center opacity-85 transition-opacity hover:opacity-100">
+      <div className="flex h-11 shrink-0 items-center justify-center opacity-90 transition-opacity hover:opacity-100">
         <div className="flex items-center gap-1.5">
-          <span className="text-[10px] font-bold lowercase tracking-tight text-slate-700">
+          <span className={`text-[10px] font-bold lowercase tracking-tight ${soft}`}>
             zpizza
           </span>
-          <span className="text-3xl font-black leading-none text-slate-900">
-            Z
-          </span>
+          <span className={`text-3xl font-black leading-none ${main}`}>Z</span>
         </div>
       </div>
     </div>
   );
 }
 
+function DeliveryHeroVisual() {
+  return (
+    <div className="relative mx-auto w-full max-w-[620px]">
+      {/* Background glow */}
+      <div className="absolute inset-10 rounded-full bg-purple-300/40 blur-[90px]" />
+
+      {/* Main dashboard */}
+      <div className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white p-4 shadow-2xl shadow-purple-900/10 sm:p-6">
+
+        {/* Dashboard header */}
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <p className="text-xs font-semibold text-slate-400">
+              DELIVERY OVERVIEW
+            </p>
+            <h3 className="mt-1 text-lg font-extrabold text-slate-900">
+              Today's routes
+            </h3>
+          </div>
+
+          <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+            Live tracking
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-2 py-5">
+          <div className="rounded-2xl bg-purple-50 p-3">
+            <Truck className="h-5 w-5 text-purple-600" />
+            <p className="mt-3 text-xl font-extrabold text-slate-900">24</p>
+            <p className="text-[10px] font-medium text-slate-500">
+              Active routes
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-amber-50 p-3">
+            <PackageCheck className="h-5 w-5 text-amber-600" />
+            <p className="mt-3 text-xl font-extrabold text-slate-900">186</p>
+            <p className="text-[10px] font-medium text-slate-500">
+              Deliveries
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-emerald-50 p-3">
+            <Clock3 className="h-5 w-5 text-emerald-600" />
+            <p className="mt-3 text-xl font-extrabold text-slate-900">96%</p>
+            <p className="text-[10px] font-medium text-slate-500">
+              On-time rate
+            </p>
+          </div>
+        </div>
+
+        {/* Map */}
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-[#F1F5F9]">
+          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
+            <MapPinned className="h-4 w-4 text-purple-600" />
+            <span className="text-xs font-bold text-slate-700">
+              Optimized delivery map
+            </span>
+          </div>
+
+          <svg
+            viewBox="0 0 560 330"
+            className="h-auto w-full"
+            fill="none"
+          >
+            <rect width="560" height="330" fill="#F1F5F9" />
+
+            {/* City blocks */}
+            <g fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="2">
+              <rect x="20" y="25" width="105" height="65" rx="9" />
+              <rect x="145" y="25" width="105" height="65" rx="9" />
+              <rect x="275" y="25" width="105" height="65" rx="9" />
+              <rect x="405" y="25" width="130" height="65" rx="9" />
+
+              <rect x="20" y="115" width="105" height="65" rx="9" />
+              <rect x="145" y="115" width="105" height="65" rx="9" />
+              <rect x="275" y="115" width="105" height="65" rx="9" />
+              <rect x="405" y="115" width="130" height="65" rx="9" />
+
+              <rect x="20" y="205" width="105" height="95" rx="9" />
+              <rect x="145" y="205" width="105" height="95" rx="9" />
+              <rect x="275" y="205" width="105" height="95" rx="9" />
+              <rect x="405" y="205" width="130" height="95" rx="9" />
+            </g>
+
+            {/* Green areas */}
+            <rect x="285" y="125" width="85" height="45" rx="7" fill="#DCFCE7" />
+            <rect x="30" y="215" width="85" height="75" rx="7" fill="#DCFCE7" />
+
+            {/* Road network */}
+            <g stroke="#CBD5E1" strokeWidth="7" strokeLinecap="round">
+              <path d="M0 102 H560" />
+              <path d="M0 192 H560" />
+              <path d="M135 0 V330" />
+              <path d="M265 0 V330" />
+              <path d="M395 0 V330" />
+            </g>
+
+            <g stroke="white" strokeWidth="2" strokeDasharray="7 8">
+              <path d="M0 102 H560" />
+              <path d="M0 192 H560" />
+              <path d="M135 0 V330" />
+              <path d="M265 0 V330" />
+              <path d="M395 0 V330" />
+            </g>
+
+            {/* Optimized route */}
+            <path
+              d="M65 260 L65 192 L185 192 L185 102 L330 102 L330 192 L465 192 L465 65"
+              stroke="#7C3AED"
+              strokeWidth="7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="12 5"
+              className="route-dash"
+            />
+
+            {/* Route stops */}
+            {[
+              { x: 65, y: 260, n: '1' },
+              { x: 185, y: 192, n: '2' },
+              { x: 185, y: 102, n: '3' },
+              { x: 330, y: 102, n: '4' },
+              { x: 465, y: 192, n: '5' },
+            ].map((stop) => (
+              <g key={stop.n}>
+                <circle
+                  cx={stop.x}
+                  cy={stop.y}
+                  r="15"
+                  fill="#7C3AED"
+                  stroke="white"
+                  strokeWidth="4"
+                />
+                <text
+                  x={stop.x}
+                  y={stop.y + 4}
+                  textAnchor="middle"
+                  fontSize="11"
+                  fontWeight="bold"
+                  fill="white"
+                >
+                  {stop.n}
+                </text>
+              </g>
+            ))}
+
+            {/* Destination */}
+            <circle cx="465" cy="65" r="19" fill="#F59E0B" opacity=".2" />
+            <circle cx="465" cy="65" r="10" fill="#F59E0B" stroke="white" strokeWidth="4" />
+
+            {/* Delivery vehicle */}
+            <g className="delivery-vehicle">
+              <rect x="308" y="180" width="38" height="24" rx="6" fill="#F59E0B" stroke="white" strokeWidth="3" />
+              <path d="M346 187 H357 L365 197 V204 H346 Z" fill="#7C3AED" stroke="white" strokeWidth="2" />
+              <circle cx="319" cy="207" r="5" fill="#334155" />
+              <circle cx="352" cy="207" r="5" fill="#334155" />
+            </g>
+          </svg>
+
+          {/* Map bottom label */}
+          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl border border-white/80 bg-white/95 px-3 py-2.5 shadow-lg backdrop-blur">
+            <div>
+              <p className="text-[10px] font-medium text-slate-400">
+                CURRENT ROUTE
+              </p>
+              <p className="text-xs font-bold text-slate-800">
+                Downtown → East Avenue
+              </p>
+            </div>
+            <span className="rounded-lg bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
+              Optimized
+            </span>
+          </div>
+        </div>
+
+        {/* Bottom route information */}
+        <div className="mt-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-100">
+              <Navigation className="h-4 w-4 text-purple-700" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-slate-800">
+                Route successfully planned
+              </p>
+              <p className="text-[10px] text-slate-500">
+                5 stops • No unnecessary backtracking
+              </p>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <p className="text-lg font-extrabold text-emerald-600">
+              25%
+            </p>
+            <p className="text-[10px] font-medium text-slate-500">
+              Cost saving
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating delivery badge */}
+      <div className="absolute -right-2 top-16 hidden items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3 shadow-xl sm:flex">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+          <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+        </div>
+        <div>
+          <p className="text-xs font-extrabold text-slate-900">
+            Delivery completed
+          </p>
+          <p className="text-[10px] text-slate-500">
+            Order #DLV-2048
+          </p>
+        </div>
+      </div>
+
+      {/* Floating ETA badge */}
+      <div className="absolute -bottom-5 -left-2 flex items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3 shadow-xl sm:-left-7">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
+          <Clock3 className="h-5 w-5 text-amber-600" />
+        </div>
+        <div>
+          <p className="text-[10px] font-medium text-slate-400">
+            ESTIMATED ARRIVAL
+          </p>
+          <p className="text-sm font-extrabold text-slate-900">
+            10:25 AM
+          </p>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes routeDash {
+          to { stroke-dashoffset: -34; }
+        }
+        @keyframes vehicleFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .route-dash {
+          animation: routeDash 2s linear infinite;
+        }
+        .delivery-vehicle {
+          animation: vehicleFloat 2.5s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .route-dash, .delivery-vehicle { animation: none; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function Home() {
+  const heroRef = useRef<HTMLElement>(null);
+  const [isHeroActive, setIsHeroActive] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [selectedRouteId, setSelectedRouteId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const heroEl = heroRef.current;
+    if (!heroEl) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Stay black while hero is visible; switch to white once it's mostly gone.
+        // Scrolling back to top reverses it.
+        setIsHeroActive(entry.isIntersecting && entry.intersectionRatio > 0.2);
+      },
+      { threshold: [0, 0.2, 0.5, 0.8] }
+    );
+
+    observer.observe(heroEl);
+    return () => observer.disconnect();
+  }, []);
 
   const activeRoute =
     DISPATCH_ROUTES.find((r) => r.id === selectedRouteId) ?? DISPATCH_ROUTES[0];
@@ -375,7 +669,11 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen overflow-hidden bg-white text-slate-900">
+    <main
+      className={`min-h-screen overflow-hidden transition-colors duration-700 ease-out ${
+        isHeroActive ? 'bg-black text-white' : 'bg-white text-slate-900'
+      }`}
+    >
       <style>{`
         @keyframes heroEnterStrong {
           0% {
@@ -399,8 +697,14 @@ export default function Home() {
       `}</style>
 
       {/* ================= FLOATING HEADER / NAVBAR ================= */}
-      <header className="sticky top-3 z-50 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between rounded-full border border-purple-200/60 bg-white/95 px-6 py-3 shadow-xl shadow-purple-900/5 backdrop-blur-md">
+      <header className="sticky top-5 z-50 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 sm:top-6">
+        <div
+          className={`flex items-center justify-between rounded-full px-6 py-3 shadow-xl backdrop-blur-md transition-all duration-700 ease-out ${
+            isHeroActive
+              ? 'border border-white/15 bg-black/80 text-white shadow-black/40'
+              : 'border border-purple-200/60 bg-white/95 text-slate-900 shadow-purple-900/5'
+          }`}
+        >
           <Link href="/" className="flex items-center gap-2.5">
             <div className="grid h-7 w-7 grid-cols-2 gap-0.5">
               <div className="rounded-sm bg-purple-600" />
@@ -408,37 +712,74 @@ export default function Home() {
               <div className="rounded-sm bg-purple-500" />
               <div className="rounded-sm bg-amber-500" />
             </div>
-            <span className="text-xl font-extrabold tracking-tight text-slate-900">
+            <span
+              className={`text-xl font-extrabold tracking-tight transition-colors duration-700 ${
+                isHeroActive ? 'text-white' : 'text-slate-900'
+              }`}
+            >
               Deliver it
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-8 text-sm font-semibold text-slate-700 md:flex">
-            <div className="flex cursor-pointer items-center gap-1 transition-colors hover:text-purple-600">
-             <Link href="/capabilities" className="transition-colors hover:text-purple-600">
-  Capabilities
+          <nav
+            className={`hidden items-center gap-8 text-sm font-semibold md:flex ${
+              isHeroActive ? 'text-slate-200' : 'text-slate-700'
+            }`}
+          >
+            <div className="flex cursor-pointer items-center gap-1 transition-colors hover:text-purple-400">
+              <Link
+                href="/capabilities"
+                className={`transition-colors ${
+                  isHeroActive ? 'hover:text-purple-300' : 'hover:text-purple-600'
+                }`}
+              >
+                Capabilities
+              </Link>
+            </div>
+           <Link
+  href="/Sector"
+  className={`transition-colors ${
+    isHeroActive ? 'hover:text-purple-300' : 'hover:text-purple-600'
+  }`}
+>
+  Sectors
 </Link>
-            </div>
-            <div className="flex cursor-pointer items-center gap-1 transition-colors hover:text-purple-600">
-              <span>Sectors</span>
-              <ChevronDown className="h-4 w-4 text-slate-400" />
-            </div>
-            <Link href="/pricing" className="transition-colors hover:text-purple-600">
+            <Link
+              href="/pricing"
+              className={`transition-colors ${
+                isHeroActive ? 'hover:text-purple-300' : 'hover:text-purple-600'
+              }`}
+            >
               Plans
             </Link>
-            <Link href="/about" className="transition-colors hover:text-purple-600">
+            <Link
+              href="/about"
+              className={`transition-colors ${
+                isHeroActive ? 'hover:text-purple-300' : 'hover:text-purple-600'
+              }`}
+            >
               About us
             </Link>
           </nav>
 
           <div className="flex items-center gap-5">
-            <div className="hidden cursor-pointer items-center gap-1 text-sm font-semibold text-slate-700 transition-colors hover:text-purple-600 lg:flex">
+            <div
+              className={`hidden cursor-pointer items-center gap-1 text-sm font-semibold transition-colors lg:flex ${
+                isHeroActive
+                  ? 'text-slate-200 hover:text-white'
+                  : 'text-slate-700 hover:text-purple-600'
+              }`}
+            >
               <span>Sign in</span>
               <ChevronDown className="h-4 w-4 text-slate-400" />
             </div>
             <Link
               href="/demo"
-              className="hidden text-sm font-semibold text-slate-700 transition-colors hover:text-slate-900 sm:inline-block"
+              className={`hidden text-sm font-semibold transition-colors sm:inline-block ${
+                isHeroActive
+                  ? 'text-slate-200 hover:text-white'
+                  : 'text-slate-700 hover:text-slate-900'
+              }`}
             >
               Book a demo
             </Link>
@@ -452,75 +793,116 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ================= HERO SECTION (TALLER VERTICALLY +10%, COMPACT WIDTH) ================= */}
-      <section className="relative z-10 mx-auto max-w-5xl px-4 pb-14 pt-16 text-center sm:px-6 lg:px-8 lg:pb-16 lg:pt-20">
-        <h1 className="hero-stagger-1 mx-auto max-w-4xl text-3xl font-extrabold leading-[1.28] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
-          <span>We deliver the best route along </span>
-          <span className="bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-500 bg-clip-text text-transparent">
-            every delivery path
-          </span>
-        </h1>
+      {/* ================= FULL-BLEED SPLIT HERO SECTION ================= */}
+      <section
+        ref={heroRef}
+        className="relative z-10 w-full bg-black"
+      >
+        <div className="grid min-h-[560px] w-full grid-cols-1 overflow-hidden bg-black lg:min-h-[680px] lg:grid-cols-2">
+          {/* Earth image — starts left, top edge, fills left half */}
+          <div className="relative h-[360px] w-full overflow-hidden bg-black sm:h-[460px] lg:h-full lg:min-h-[680px]">
+            <img
+              src="/images/pexels-zelch-30596223.jpg"
+              alt="Earth from orbit along global delivery corridors"
+              className="absolute inset-0 h-full w-full object-cover object-left-top"
+            />
+            {/* Blend right edge of image into solid black */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/15 lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-black" />
+          </div>
 
-        <p className="hero-stagger-2 mx-auto mt-6 max-w-2xl text-base font-normal leading-[1.75] text-slate-600 sm:text-lg">
-          Smarter stop sequences, smoother shift handoffs, and live customer tracking built to help every delivery partner finish strong and save up to 25% on delivery costs.
-        </p>
+          {/* Right half — solid black + copy */}
+          <div className="flex flex-col justify-center bg-black px-6 pb-16 pt-20 text-left text-white sm:px-10 sm:pt-24 lg:px-14 lg:pt-8 xl:px-20">
+            <div className="max-w-2xl">
+              <p className="hero-stagger-1 mb-5 text-xs font-bold uppercase tracking-[0.24em] text-amber-400 sm:text-sm">
+                Smarter delivery starts here
+              </p>
 
-        <div className="hero-stagger-3 mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Link
-            href="/signup"
-            className="w-full rounded-xl bg-[#ffb703] px-7 py-4 text-center text-sm font-bold text-slate-950 shadow-xl shadow-amber-500/20 transition-all hover:scale-[1.02] hover:bg-[#ffaa00] active:scale-95 sm:w-auto sm:text-base"
-          >
-            Start free trial
-          </Link>
+              <h1 className="hero-stagger-1 text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl xl:text-5xl 2xl:text-6xl">
+                <span>We deliver the best route along </span>
+                <span className="bg-gradient-to-r from-purple-400 via-indigo-400 to-amber-400 bg-clip-text text-transparent">
+                  every delivery path
+                </span>
+              </h1>
 
-          <Link
-              href="/demo"
-              className="hidden text-sm font-semibold text-slate-700 transition-colors hover:text-slate-900 sm:inline-block"
-            >
-              Book a demo
-            </Link>
-        </div>
+              <p className="hero-stagger-2 mt-6 max-w-xl text-sm leading-[1.8] text-slate-300 sm:text-base">
+                Smarter stop sequences, smoother shift handoffs, and live customer tracking built to help every delivery partner finish strong and save up to 25% on delivery costs.
+              </p>
 
-        <p className="hero-stagger-3 mt-4 text-xs font-medium text-slate-500">
-          No credit card needed
-        </p>
-      </section>
+              <div className="hero-stagger-3 mt-8 flex flex-wrap items-center gap-5">
+                <Link
+                  href="/signup"
+                  className="rounded-xl bg-[#ffb703] px-7 py-3.5 text-center text-sm font-bold text-slate-950 shadow-xl shadow-amber-500/20 transition-all hover:scale-[1.02] hover:bg-[#ffaa00] active:scale-95 sm:text-base"
+                >
+                  Start free trial
+                </Link>
 
-      {/* ================= CONTINUOUS LOOP BRAND STRIP ================= */}
-      <ScrollReveal variant="slide-up" delayMs={60} threshold={0.08}>
-        <section className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-2 text-center sm:px-6 lg:px-8">
-          <p className="text-sm font-semibold tracking-tight text-slate-600 sm:text-base">
-            Who optimized their route — you can be next
-          </p>
+                <Link
+                  href="/demo"
+                  className="text-sm font-semibold text-slate-200 transition-colors hover:text-white"
+                >
+                  Book a demo
+                </Link>
+              </div>
 
-          <style>{`
-            @keyframes logoLoopScroll {
-              0% {
-                transform: translate3d(0, 0, 0);
-              }
-              100% {
-                transform: translate3d(-50%, 0, 0);
-              }
-            }
-            .brand-loop-track {
-              display: flex;
-              width: max-content;
-              animation: logoLoopScroll 22s linear infinite;
-              will-change: transform;
-            }
-            .brand-loop-container:hover .brand-loop-track {
-              animation-play-state: paused;
-            }
-          `}</style>
-
-          <div className="brand-loop-container relative mt-5 overflow-hidden py-1 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-            <div className="brand-loop-track items-center text-slate-900">
-              <BrandLogosGroup />
-              <BrandLogosGroup ariaHidden />
+              <p className="hero-stagger-3 mt-4 text-xs font-medium text-slate-400">
+                No credit card needed
+              </p>
             </div>
           </div>
-        </section>
-      </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ================= BRAND LOGOS STRIP (black while hero active) ================= */}
+      <div
+        className={`relative z-10 w-full transition-colors duration-700 ease-out ${
+          isHeroActive ? 'bg-black text-white' : 'bg-white text-slate-900'
+        }`}
+      >
+        <ScrollReveal variant="slide-up" delayMs={60} threshold={0.08}>
+          <section className="mx-auto w-full max-w-7xl px-4 pb-9 pt-8 text-center sm:px-6 lg:px-8">
+            <p
+              className={`text-sm font-semibold tracking-tight sm:text-base transition-colors duration-700 ${
+                isHeroActive ? 'text-slate-300' : 'text-slate-700'
+              }`}
+            >
+              Who optimized their route — you can be next
+            </p>
+
+            <style>{`
+              @keyframes logoLoopScroll {
+                0% {
+                  transform: translate3d(0, 0, 0);
+                }
+                100% {
+                  transform: translate3d(-50%, 0, 0);
+                }
+              }
+              .brand-loop-track {
+                display: flex;
+                width: max-content;
+                animation: logoLoopScroll 22s linear infinite;
+                will-change: transform;
+              }
+              .brand-loop-container:hover .brand-loop-track {
+                animation-play-state: paused;
+              }
+            `}</style>
+
+            <div
+              className={`brand-loop-container relative mt-5 overflow-hidden py-1 ${
+                isHeroActive
+                  ? '[mask-image:linear-gradient(to_right,transparent,white_8%,white_92%,transparent)]'
+                  : '[mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]'
+              }`}
+            >
+              <div className="brand-loop-track items-center">
+                <BrandLogosGroup dark={isHeroActive} />
+                <BrandLogosGroup ariaHidden dark={isHeroActive} />
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+      </div>
 
       {/* ================= SHOWCASE SECTION (Map UI & Dashboard) ================= */}
       <section className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
