@@ -10,12 +10,11 @@ import {
   ShieldAlert,
   ChevronDown,
   MapPin,
-  Clock3,
-  Truck,
-  PackageCheck,
-  MapPinned,
+  Menu,
+  X,
   Navigation,
-} from "lucide-react";
+} from 'lucide-react';
+
 type IndustryItem = {
   id: string;
   title: string;
@@ -146,7 +145,7 @@ function ScrollReveal({
     <div
       ref={ref}
       style={visible ? visibleStyle : getHiddenStyle()}
-      className={className}
+      className={`min-w-0 ${className}`}
     >
       {children}
     </div>
@@ -310,7 +309,7 @@ function BrandLogosGroup({
   return (
     <div
       aria-hidden={ariaHidden}
-      className="flex shrink-0 items-center gap-14 pr-14 sm:gap-20 sm:pr-20"
+      className="flex shrink-0 items-center gap-10 pr-10 sm:gap-16 sm:pr-16 lg:gap-20 lg:pr-20"
     >
       <div className="flex h-11 shrink-0 items-center justify-center opacity-90 transition-opacity hover:opacity-100">
         <span className={`font-serif text-2xl font-black tracking-tight ${main}`}>
@@ -366,266 +365,12 @@ function BrandLogosGroup({
   );
 }
 
-function DeliveryHeroVisual() {
-  return (
-    <div className="relative mx-auto w-full max-w-[620px]">
-      {/* Background glow */}
-      <div className="absolute inset-10 rounded-full bg-purple-300/40 blur-[90px]" />
-
-      {/* Main dashboard */}
-      <div className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white p-4 shadow-2xl shadow-purple-900/10 sm:p-6">
-
-        {/* Dashboard header */}
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <div>
-            <p className="text-xs font-semibold text-slate-400">
-              DELIVERY OVERVIEW
-            </p>
-            <h3 className="mt-1 text-lg font-extrabold text-slate-900">
-              Today's routes
-            </h3>
-          </div>
-
-          <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-            Live tracking
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-2 py-5">
-          <div className="rounded-2xl bg-purple-50 p-3">
-            <Truck className="h-5 w-5 text-purple-600" />
-            <p className="mt-3 text-xl font-extrabold text-slate-900">24</p>
-            <p className="text-[10px] font-medium text-slate-500">
-              Active routes
-            </p>
-          </div>
-
-          <div className="rounded-2xl bg-amber-50 p-3">
-            <PackageCheck className="h-5 w-5 text-amber-600" />
-            <p className="mt-3 text-xl font-extrabold text-slate-900">186</p>
-            <p className="text-[10px] font-medium text-slate-500">
-              Deliveries
-            </p>
-          </div>
-
-          <div className="rounded-2xl bg-emerald-50 p-3">
-            <Clock3 className="h-5 w-5 text-emerald-600" />
-            <p className="mt-3 text-xl font-extrabold text-slate-900">96%</p>
-            <p className="text-[10px] font-medium text-slate-500">
-              On-time rate
-            </p>
-          </div>
-        </div>
-
-        {/* Map */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-[#F1F5F9]">
-          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
-            <MapPinned className="h-4 w-4 text-purple-600" />
-            <span className="text-xs font-bold text-slate-700">
-              Optimized delivery map
-            </span>
-          </div>
-
-          <svg
-            viewBox="0 0 560 330"
-            className="h-auto w-full"
-            fill="none"
-          >
-            <rect width="560" height="330" fill="#F1F5F9" />
-
-            {/* City blocks */}
-            <g fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="2">
-              <rect x="20" y="25" width="105" height="65" rx="9" />
-              <rect x="145" y="25" width="105" height="65" rx="9" />
-              <rect x="275" y="25" width="105" height="65" rx="9" />
-              <rect x="405" y="25" width="130" height="65" rx="9" />
-
-              <rect x="20" y="115" width="105" height="65" rx="9" />
-              <rect x="145" y="115" width="105" height="65" rx="9" />
-              <rect x="275" y="115" width="105" height="65" rx="9" />
-              <rect x="405" y="115" width="130" height="65" rx="9" />
-
-              <rect x="20" y="205" width="105" height="95" rx="9" />
-              <rect x="145" y="205" width="105" height="95" rx="9" />
-              <rect x="275" y="205" width="105" height="95" rx="9" />
-              <rect x="405" y="205" width="130" height="95" rx="9" />
-            </g>
-
-            {/* Green areas */}
-            <rect x="285" y="125" width="85" height="45" rx="7" fill="#DCFCE7" />
-            <rect x="30" y="215" width="85" height="75" rx="7" fill="#DCFCE7" />
-
-            {/* Road network */}
-            <g stroke="#CBD5E1" strokeWidth="7" strokeLinecap="round">
-              <path d="M0 102 H560" />
-              <path d="M0 192 H560" />
-              <path d="M135 0 V330" />
-              <path d="M265 0 V330" />
-              <path d="M395 0 V330" />
-            </g>
-
-            <g stroke="white" strokeWidth="2" strokeDasharray="7 8">
-              <path d="M0 102 H560" />
-              <path d="M0 192 H560" />
-              <path d="M135 0 V330" />
-              <path d="M265 0 V330" />
-              <path d="M395 0 V330" />
-            </g>
-
-            {/* Optimized route */}
-            <path
-              d="M65 260 L65 192 L185 192 L185 102 L330 102 L330 192 L465 192 L465 65"
-              stroke="#7C3AED"
-              strokeWidth="7"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="12 5"
-              className="route-dash"
-            />
-
-            {/* Route stops */}
-            {[
-              { x: 65, y: 260, n: '1' },
-              { x: 185, y: 192, n: '2' },
-              { x: 185, y: 102, n: '3' },
-              { x: 330, y: 102, n: '4' },
-              { x: 465, y: 192, n: '5' },
-            ].map((stop) => (
-              <g key={stop.n}>
-                <circle
-                  cx={stop.x}
-                  cy={stop.y}
-                  r="15"
-                  fill="#7C3AED"
-                  stroke="white"
-                  strokeWidth="4"
-                />
-                <text
-                  x={stop.x}
-                  y={stop.y + 4}
-                  textAnchor="middle"
-                  fontSize="11"
-                  fontWeight="bold"
-                  fill="white"
-                >
-                  {stop.n}
-                </text>
-              </g>
-            ))}
-
-            {/* Destination */}
-            <circle cx="465" cy="65" r="19" fill="#F59E0B" opacity=".2" />
-            <circle cx="465" cy="65" r="10" fill="#F59E0B" stroke="white" strokeWidth="4" />
-
-            {/* Delivery vehicle */}
-            <g className="delivery-vehicle">
-              <rect x="308" y="180" width="38" height="24" rx="6" fill="#F59E0B" stroke="white" strokeWidth="3" />
-              <path d="M346 187 H357 L365 197 V204 H346 Z" fill="#7C3AED" stroke="white" strokeWidth="2" />
-              <circle cx="319" cy="207" r="5" fill="#334155" />
-              <circle cx="352" cy="207" r="5" fill="#334155" />
-            </g>
-          </svg>
-
-          {/* Map bottom label */}
-          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl border border-white/80 bg-white/95 px-3 py-2.5 shadow-lg backdrop-blur">
-            <div>
-              <p className="text-[10px] font-medium text-slate-400">
-                CURRENT ROUTE
-              </p>
-              <p className="text-xs font-bold text-slate-800">
-                Downtown → East Avenue
-              </p>
-            </div>
-            <span className="rounded-lg bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
-              Optimized
-            </span>
-          </div>
-        </div>
-
-        {/* Bottom route information */}
-        <div className="mt-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-100">
-              <Navigation className="h-4 w-4 text-purple-700" />
-            </div>
-            <div>
-              <p className="text-xs font-bold text-slate-800">
-                Route successfully planned
-              </p>
-              <p className="text-[10px] text-slate-500">
-                5 stops • No unnecessary backtracking
-              </p>
-            </div>
-          </div>
-
-          <div className="text-right">
-            <p className="text-lg font-extrabold text-emerald-600">
-              25%
-            </p>
-            <p className="text-[10px] font-medium text-slate-500">
-              Cost saving
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Floating delivery badge */}
-      <div className="absolute -right-2 top-16 hidden items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3 shadow-xl sm:flex">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
-          <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-        </div>
-        <div>
-          <p className="text-xs font-extrabold text-slate-900">
-            Delivery completed
-          </p>
-          <p className="text-[10px] text-slate-500">
-            Order #DLV-2048
-          </p>
-        </div>
-      </div>
-
-      {/* Floating ETA badge */}
-      <div className="absolute -bottom-5 -left-2 flex items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3 shadow-xl sm:-left-7">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
-          <Clock3 className="h-5 w-5 text-amber-600" />
-        </div>
-        <div>
-          <p className="text-[10px] font-medium text-slate-400">
-            ESTIMATED ARRIVAL
-          </p>
-          <p className="text-sm font-extrabold text-slate-900">
-            10:25 AM
-          </p>
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes routeDash {
-          to { stroke-dashoffset: -34; }
-        }
-        @keyframes vehicleFloat {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-5px); }
-        }
-        .route-dash {
-          animation: routeDash 2s linear infinite;
-        }
-        .delivery-vehicle {
-          animation: vehicleFloat 2.5s ease-in-out infinite;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .route-dash, .delivery-vehicle { animation: none; }
-        }
-      `}</style>
-    </div>
-  );
-}
-
 export default function Home() {
   const heroRef = useRef<HTMLElement>(null);
+  const accountMenuRef = useRef<HTMLDivElement>(null);
   const [isHeroActive, setIsHeroActive] = useState(true);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -637,8 +382,6 @@ export default function Home() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Stay black while hero is visible; switch to white once it's mostly gone.
-        // Scrolling back to top reverses it.
         setIsHeroActive(entry.isIntersecting && entry.intersectionRatio > 0.2);
       },
       { threshold: [0, 0.2, 0.5, 0.8] }
@@ -647,6 +390,20 @@ export default function Home() {
     observer.observe(heroEl);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (!accountOpen) return;
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        accountMenuRef.current &&
+        !accountMenuRef.current.contains(event.target as Node)
+      ) {
+        setAccountOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [accountOpen]);
 
   const activeRoute =
     DISPATCH_ROUTES.find((r) => r.id === selectedRouteId) ?? DISPATCH_ROUTES[0];
@@ -661,7 +418,7 @@ export default function Home() {
   const scrollByCards = (direction: 'left' | 'right') => {
     const el = carouselRef.current;
     if (!el) return;
-    const step = Math.max(320, Math.round(el.clientWidth * 0.65));
+    const step = Math.max(280, Math.round(el.clientWidth * 0.65));
     el.scrollBy({
       left: direction === 'left' ? -step : step,
       behavior: 'smooth',
@@ -670,7 +427,7 @@ export default function Home() {
 
   return (
     <main
-      className={`min-h-screen overflow-hidden transition-colors duration-700 ease-out ${
+      className={`min-h-screen w-full overflow-x-clip transition-colors duration-700 ease-out ${
         isHeroActive ? 'bg-black text-white' : 'bg-white text-slate-900'
       }`}
     >
@@ -678,7 +435,7 @@ export default function Home() {
         @keyframes heroEnterStrong {
           0% {
             opacity: 0.05;
-            transform: translate3d(0, 38px, 0) scale(0.97);
+            transform: translate3d(0, 32px, 0) scale(0.98);
           }
           100% {
             opacity: 1;
@@ -686,34 +443,34 @@ export default function Home() {
           }
         }
         .hero-stagger-1 {
-          animation: heroEnterStrong 780ms cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation: heroEnterStrong 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
         }
         .hero-stagger-2 {
-          animation: heroEnterStrong 820ms cubic-bezier(0.16, 1, 0.3, 1) 140ms both;
+          animation: heroEnterStrong 800ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
         }
         .hero-stagger-3 {
-          animation: heroEnterStrong 760ms cubic-bezier(0.16, 1, 0.3, 1) 260ms both;
+          animation: heroEnterStrong 760ms cubic-bezier(0.16, 1, 0.3, 1) 220ms both;
         }
       `}</style>
 
-      {/* ================= FLOATING HEADER / NAVBAR ================= */}
-      <header className="sticky top-5 z-50 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 sm:top-6">
+      {/* ================= NON-STICKY HEADER / NAVBAR ================= */}
+      <header className="relative z-50 mx-auto w-full max-w-6xl px-3 pt-3 sm:px-6 sm:pt-4 lg:px-8">
         <div
-          className={`flex items-center justify-between rounded-full px-6 py-3 shadow-xl backdrop-blur-md transition-all duration-700 ease-out ${
+          className={`flex items-center justify-between gap-2 rounded-full px-3.5 py-2.5 shadow-2xl backdrop-blur-xl transition-all duration-500 sm:px-6 sm:py-3 ${
             isHeroActive
-              ? 'border border-white/15 bg-black/80 text-white shadow-black/40'
-              : 'border border-purple-200/60 bg-white/95 text-slate-900 shadow-purple-900/5'
+              ? 'border border-white/10 bg-zinc-900/80 text-white'
+              : 'border border-slate-200/80 bg-white/90 text-slate-900'
           }`}
         >
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="grid h-7 w-7 grid-cols-2 gap-0.5">
-              <div className="rounded-sm bg-purple-600" />
-              <div className="rounded-sm bg-amber-400" />
-              <div className="rounded-sm bg-purple-500" />
-              <div className="rounded-sm bg-amber-500" />
+          <Link href="/" className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+            <div className="grid h-7 w-7 grid-cols-2 gap-0.5 rounded-md p-0.5">
+              <div className="rounded-[3px] bg-purple-500" />
+              <div className="rounded-[3px] bg-amber-400" />
+              <div className="rounded-[3px] bg-purple-400" />
+              <div className="rounded-[3px] bg-amber-500" />
             </div>
             <span
-              className={`text-xl font-extrabold tracking-tight transition-colors duration-700 ${
+              className={`text-base font-extrabold tracking-tight transition-colors duration-300 sm:text-lg ${
                 isHeroActive ? 'text-white' : 'text-slate-900'
               }`}
             >
@@ -722,131 +479,222 @@ export default function Home() {
           </Link>
 
           <nav
-            className={`hidden items-center gap-8 text-sm font-semibold md:flex ${
-              isHeroActive ? 'text-slate-200' : 'text-slate-700'
+            className={`hidden items-center gap-6 text-sm font-medium md:flex lg:gap-8 ${
+              isHeroActive ? 'text-zinc-400' : 'text-slate-600'
             }`}
           >
-            <div className="flex cursor-pointer items-center gap-1 transition-colors hover:text-purple-400">
-              <Link
-                href="/capabilities"
-                className={`transition-colors ${
-                  isHeroActive ? 'hover:text-purple-300' : 'hover:text-purple-600'
-                }`}
-              >
-                Capabilities
-              </Link>
-            </div>
-           <Link
-  href="/Sector"
-  className={`transition-colors ${
-    isHeroActive ? 'hover:text-purple-300' : 'hover:text-purple-600'
-  }`}
->
-  Sectors
-</Link>
+            <Link
+              href="/"
+              className={`whitespace-nowrap font-semibold transition-colors ${
+                isHeroActive ? 'text-white' : 'text-slate-900'
+              }`}
+            >
+              Home
+            </Link>
+            <Link
+              href="/capabilities"
+              className={`whitespace-nowrap transition-colors ${
+                isHeroActive ? 'hover:text-white' : 'hover:text-slate-900'
+              }`}
+            >
+              Capabilities
+            </Link>
+            <Link
+              href="/sectors"
+              className={`whitespace-nowrap transition-colors ${
+                isHeroActive ? 'hover:text-white' : 'hover:text-slate-900'
+              }`}
+            >
+              Sectors
+            </Link>
             <Link
               href="/pricing"
-              className={`transition-colors ${
-                isHeroActive ? 'hover:text-purple-300' : 'hover:text-purple-600'
+              className={`whitespace-nowrap transition-colors ${
+                isHeroActive ? 'hover:text-white' : 'hover:text-slate-900'
               }`}
             >
               Plans
             </Link>
             <Link
               href="/about"
-              className={`transition-colors ${
-                isHeroActive ? 'hover:text-purple-300' : 'hover:text-purple-600'
+              className={`whitespace-nowrap transition-colors ${
+                isHeroActive ? 'hover:text-white' : 'hover:text-slate-900'
               }`}
             >
               About us
             </Link>
           </nav>
 
-          <div className="flex items-center gap-5">
-            <div
-              className={`hidden cursor-pointer items-center gap-1 text-sm font-semibold transition-colors lg:flex ${
-                isHeroActive
-                  ? 'text-slate-200 hover:text-white'
-                  : 'text-slate-700 hover:text-purple-600'
-              }`}
-            >
-              <span>Sign in</span>
-              <ChevronDown className="h-4 w-4 text-slate-400" />
+          <div className="flex shrink-0 items-center gap-2 sm:gap-4 lg:gap-5">
+            <div ref={accountMenuRef} className="relative hidden sm:block">
+              <button
+                type="button"
+                onClick={() => setAccountOpen((prev) => !prev)}
+                aria-expanded={accountOpen}
+                className={`flex cursor-pointer items-center gap-1 whitespace-nowrap text-sm font-medium transition-colors ${
+                  isHeroActive
+                    ? 'text-zinc-300 hover:text-white'
+                    : 'text-slate-700 hover:text-slate-950'
+                }`}
+              >
+                <span>Account</span>
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform duration-200 ${
+                    accountOpen ? 'rotate-180' : ''
+                  } ${isHeroActive ? 'text-zinc-400' : 'text-slate-500'}`}
+                />
+              </button>
+
+              {accountOpen && (
+                <div
+                  className={`absolute right-0 mt-3 w-44 overflow-hidden rounded-2xl border py-1.5 shadow-2xl backdrop-blur-xl ${
+                    isHeroActive
+                      ? 'border-white/10 bg-zinc-900/95 text-zinc-200'
+                      : 'border-slate-200 bg-white/95 text-slate-800'
+                  }`}
+                >
+                  <Link
+                    href="/signin"
+                    onClick={() => setAccountOpen(false)}
+                    className={`block px-4 py-2 text-sm font-medium transition-colors ${
+                      isHeroActive
+                        ? 'hover:bg-white/10 hover:text-white'
+                        : 'hover:bg-slate-100 hover:text-slate-950'
+                    }`}
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    href="/contact"
+                    onClick={() => setAccountOpen(false)}
+                    className={`block px-4 py-2 text-sm font-medium transition-colors ${
+                      isHeroActive
+                        ? 'hover:bg-white/10 hover:text-white'
+                        : 'hover:bg-slate-100 hover:text-slate-950'
+                    }`}
+                  >
+                    Contact us
+                  </Link>
+                </div>
+              )}
             </div>
+
             <Link
               href="/demo"
-              className={`hidden text-sm font-semibold transition-colors sm:inline-block ${
+              className="whitespace-nowrap rounded-full bg-amber-400 px-3.5 py-2 text-xs font-bold text-zinc-950 shadow-lg shadow-amber-500/20 transition-all hover:-translate-y-0.5 hover:bg-amber-300 sm:px-5 sm:text-sm"
+            >
+              Try Live Demo
+            </Link>
+
+            <button
+              type="button"
+              aria-label="Toggle Menu"
+              onClick={() => setMobileMenuOpen((v) => !v)}
+              className={`inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border md:hidden ${
                 isHeroActive
-                  ? 'text-slate-200 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-900'
+                  ? 'border-white/15 text-zinc-300'
+                  : 'border-slate-200 text-slate-700'
               }`}
             >
-              Book a demo
-            </Link>
-            <Link
-              href="/signup"
-              className="rounded-full bg-[#ffb703] px-5 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 transition-all hover:scale-[1.02] hover:bg-[#ffaa00] active:scale-95"
-            >
-              Start free trial
-            </Link>
+              {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
           </div>
         </div>
+
+        {mobileMenuOpen && (
+          <div
+            className={`mt-2 rounded-3xl border p-5 shadow-2xl backdrop-blur-xl md:hidden ${
+              isHeroActive
+                ? 'border-white/10 bg-zinc-900/95 text-zinc-300'
+                : 'border-slate-200 bg-white/95 text-slate-700'
+            }`}
+          >
+            <div className="flex flex-col space-y-3 text-sm font-medium">
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="font-bold text-amber-400"
+              >
+                Home
+              </Link>
+              <Link href="/capabilities" onClick={() => setMobileMenuOpen(false)}>
+                Capabilities
+              </Link>
+              <Link href="/sectors" onClick={() => setMobileMenuOpen(false)}>
+                Sectors
+              </Link>
+              <Link href="/pricing" onClick={() => setMobileMenuOpen(false)}>
+                Plans
+              </Link>
+              <Link href="/about" onClick={() => setMobileMenuOpen(false)}>
+                About us
+              </Link>
+              <div className="border-t border-white/10 pt-3">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                  Account
+                </p>
+                <div className="flex flex-col space-y-2">
+                  <Link href="/signin" onClick={() => setMobileMenuOpen(false)}>
+                    Sign in
+                  </Link>
+                  <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
+                    Contact us
+                  </Link>
+                </div>
+              </div>
+              <Link
+                href="/demo"
+                onClick={() => setMobileMenuOpen(false)}
+                className="pt-2 font-semibold text-amber-400"
+              >
+                Try Live Demo →
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* ================= FULL-BLEED SPLIT HERO SECTION ================= */}
+      {/* ================= AESTHETIC LEFT-ALIGNED EARTH HERO ================= */}
       <section
         ref={heroRef}
-        className="relative z-10 w-full bg-black"
+        className="relative z-10 min-h-[520px] w-full overflow-hidden bg-black text-white sm:min-h-[600px] lg:min-h-[660px]"
       >
-        <div className="grid min-h-[560px] w-full grid-cols-1 overflow-hidden bg-black lg:min-h-[680px] lg:grid-cols-2">
-          {/* Earth image — starts left, top edge, fills left half */}
-          <div className="relative h-[360px] w-full overflow-hidden bg-black sm:h-[460px] lg:h-full lg:min-h-[680px]">
-            <img
-              src="/images/pexels-zelch-30596223.jpg"
-              alt="Earth from orbit along global delivery corridors"
-              className="absolute inset-0 h-full w-full object-cover object-left-top"
-            />
-            {/* Blend right edge of image into solid black */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/15 lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-black" />
-          </div>
+        {/* Full-bleed Earth image (unchanged) */}
+        <img
+          src="/images/pexels-zelch-30596223.jpg"
+          alt="Earth from orbit along global delivery corridors"
+          className="absolute inset-0 h-full w-full object-cover object-[58%_52%] sm:object-[54%_50%] lg:object-[50%_48%]"
+        />
 
-          {/* Right half — solid black + copy */}
-          <div className="flex flex-col justify-center bg-black px-6 pb-16 pt-20 text-left text-white sm:px-10 sm:pt-24 lg:px-14 lg:pt-8 xl:px-20">
-            <div className="max-w-2xl">
-              <p className="hero-stagger-1 mb-5 text-xs font-bold uppercase tracking-[0.24em] text-amber-400 sm:text-sm">
-                Smarter delivery starts here
-              </p>
+        {/* Atmospheric gradients & subtle glow for clean left-side hierarchy */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/15" />
+        <div className="pointer-events-none absolute -left-24 top-24 h-80 w-80 rounded-full bg-purple-600/20 blur-[120px]" />
+        <div className="pointer-events-none absolute bottom-12 left-32 h-64 w-64 rounded-full bg-amber-400/10 blur-[110px]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
-              <h1 className="hero-stagger-1 text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl xl:text-5xl 2xl:text-6xl">
-                <span>We deliver the best route along </span>
-                <span className="bg-gradient-to-r from-purple-400 via-indigo-400 to-amber-400 bg-clip-text text-transparent">
-                  every delivery path
-                </span>
-              </h1>
+        {/* Left-aligned hero content */}
+        <div className="relative z-10 mx-auto flex min-h-[520px] max-w-7xl flex-col justify-start px-4 pb-12 pt-14 sm:min-h-[600px] sm:px-8 sm:pb-14 sm:pt-20 lg:min-h-[660px] lg:px-10 lg:pt-28">
+          <div className="mr-auto flex w-full max-w-none flex-col items-start text-left">
+            <h1 className="hero-stagger-1 text-3xl font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
+              <span className="block sm:whitespace-nowrap">
+                We deliver the best route
+              </span>
+              <span className="mt-1 block bg-gradient-to-r from-violet-300 via-purple-200 to-amber-200 bg-clip-text text-transparent sm:whitespace-nowrap">
+                On every delivery path
+              </span>
+            </h1>
+            <p className="hero-stagger-2 mt-4 max-w-xl text-sm font-normal leading-relaxed text-slate-200/95 drop-shadow sm:mt-5 sm:text-lg xl:text-xl">
+              Smarter stop sequences and smoother shift handoffs. Live customer tracking built to cut up to 25% of delivery costs.
+            </p>
 
-              <p className="hero-stagger-2 mt-6 max-w-xl text-sm leading-[1.8] text-slate-300 sm:text-base">
-                Smarter stop sequences, smoother shift handoffs, and live customer tracking built to help every delivery partner finish strong and save up to 25% on delivery costs.
-              </p>
-
-              <div className="hero-stagger-3 mt-8 flex flex-wrap items-center gap-5">
-                <Link
-                  href="/signup"
-                  className="rounded-xl bg-[#ffb703] px-7 py-3.5 text-center text-sm font-bold text-slate-950 shadow-xl shadow-amber-500/20 transition-all hover:scale-[1.02] hover:bg-[#ffaa00] active:scale-95 sm:text-base"
-                >
-                  Start free trial
-                </Link>
-
-                <Link
-                  href="/demo"
-                  className="text-sm font-semibold text-slate-200 transition-colors hover:text-white"
-                >
-                  Book a demo
-                </Link>
-              </div>
-
-              <p className="hero-stagger-3 mt-4 text-xs font-medium text-slate-400">
-                No credit card needed
-              </p>
+            <div className="hero-stagger-3 mt-6 flex flex-wrap items-center justify-start gap-4 sm:mt-7">
+              <Link
+                href="/demo"
+                className="group inline-flex items-center justify-center gap-2.5 rounded-xl bg-[#ffb703] px-6 py-3 text-sm font-bold text-slate-950 shadow-xl shadow-amber-500/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffaa00] hover:shadow-amber-400/35 active:scale-[0.98] sm:px-7 sm:py-3.5 sm:text-base"
+              >
+                <span>Try Live Demo</span>
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+              </Link>
             </div>
           </div>
         </div>
@@ -861,7 +709,7 @@ export default function Home() {
         <ScrollReveal variant="slide-up" delayMs={60} threshold={0.08}>
           <section className="mx-auto w-full max-w-7xl px-4 pb-9 pt-8 text-center sm:px-6 lg:px-8">
             <p
-              className={`text-sm font-semibold tracking-tight sm:text-base transition-colors duration-700 ${
+              className={`text-sm font-semibold tracking-tight transition-colors duration-700 sm:text-base ${
                 isHeroActive ? 'text-slate-300' : 'text-slate-700'
               }`}
             >
@@ -905,13 +753,13 @@ export default function Home() {
       </div>
 
       {/* ================= SHOWCASE SECTION (Map UI & Dashboard) ================= */}
-      <section className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         <ScrollReveal variant="large-soft" threshold={0.06}>
-          <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-b from-white via-purple-50/25 to-slate-50/80 p-5 shadow-xl backdrop-blur-xl sm:p-8">
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-b from-white via-purple-50/25 to-slate-50/80 p-4 shadow-xl backdrop-blur-xl sm:p-8">
             <div className="mb-6 flex flex-col items-center justify-between gap-3 sm:flex-row">
               <ScrollReveal variant="slide-right" delayMs={80} threshold={0.08}>
                 <div className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-2 text-slate-800 shadow-sm">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-purple-600 text-white">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-purple-600 text-white">
                     <span className="h-2 w-2 animate-ping rounded-full bg-white" />
                   </span>
                   <span className="text-sm font-semibold">Partner app</span>
@@ -921,13 +769,13 @@ export default function Home() {
                 </div>
               </ScrollReveal>
 
-              <div className="text-xs font-semibold text-slate-500">
+              <div className="text-center text-xs font-semibold text-slate-500">
                 Live route guidance, dispatch map &amp; customer ETA
               </div>
 
               <ScrollReveal variant="slide-left" delayMs={80} threshold={0.08}>
                 <div className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-2 text-slate-800 shadow-sm">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-500 text-slate-950">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-500 text-slate-950">
                     <span className="h-2 w-2 animate-ping rounded-full bg-slate-950" />
                   </span>
                   <span className="text-sm font-semibold">Live tracker</span>
@@ -938,10 +786,9 @@ export default function Home() {
               </ScrollReveal>
             </div>
 
-            <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12">
-              {/* Left iPhone Mockup */}
+            <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 lg:grid-cols-12">
               <ScrollReveal variant="slide-right" delayMs={140} threshold={0.08} className="lg:col-span-3">
-                <div className="relative rounded-[44px] border-4 border-slate-800 bg-slate-900 p-3.5 shadow-2xl">
+                <div className="relative mx-auto w-full max-w-[340px] rounded-[44px] border-4 border-slate-800 bg-slate-900 p-3.5 shadow-2xl md:max-w-none">
                   <div className="absolute left-1/2 top-5 z-20 flex h-5 w-28 -translate-x-1/2 transform items-center justify-end rounded-full bg-black px-2.5">
                     <div className="h-2.5 w-2.5 animate-pulse rounded-full bg-purple-500/80" />
                   </div>
@@ -953,7 +800,7 @@ export default function Home() {
                     </div>
 
                     <div className="rounded-2xl border border-purple-100 bg-purple-50/90 p-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-2">
                         <p className="font-bold text-purple-700">Stop #4 of 32</p>
                         <span className="rounded-full bg-purple-600 px-2 py-0.5 text-[9px] font-bold text-white">
                           1.8 km
@@ -962,7 +809,7 @@ export default function Home() {
                       <p className="mt-1 text-[11px] font-medium text-slate-700">
                         📍 8 W 47th St, New York
                       </p>
-                      <div className="mt-2 flex items-center justify-between text-[10px]">
+                      <div className="mt-2 flex items-center justify-between gap-2 text-[10px]">
                         <span className="font-semibold text-slate-500">ETA 10:15 AM</span>
                         <span className="inline-flex items-center gap-1 font-bold text-purple-700">
                           <Navigation className="h-3 w-3" /> Left in 240m
@@ -1020,9 +867,8 @@ export default function Home() {
                 </div>
               </ScrollReveal>
 
-              {/* Center Dashboard — 6 Distinct Routes */}
-              <ScrollReveal variant="large-soft" delayMs={200} threshold={0.06} className="lg:col-span-6">
-                <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-xl">
+              <ScrollReveal variant="large-soft" delayMs={200} threshold={0.06} className="md:col-span-2 lg:col-span-6">
+                <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-xl sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 text-xs">
                     <div className="flex items-center gap-2">
                       <span className="rounded-xl bg-slate-100 px-3 py-1.5 font-bold text-slate-900">
@@ -1030,7 +876,7 @@ export default function Home() {
                       </span>
                       <span className="font-medium text-slate-500">📅 Wed, Nov 18</span>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-600">
+                    <div className="flex flex-wrap items-center gap-2 text-slate-600">
                       <button
                         type="button"
                         onClick={() => setSelectedRouteId(null)}
@@ -1048,7 +894,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Small square/pill route buttons */}
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {DISPATCH_ROUTES.map((route, idx) => {
                       const isSelected = activeRoute.id === route.id;
@@ -1079,7 +924,7 @@ export default function Home() {
                     })}
                   </div>
 
-                  <div className="relative mt-3 h-52 overflow-hidden rounded-2xl border border-slate-200 bg-[#F8FAFC] shadow-inner">
+                  <div className="relative mt-3 h-48 overflow-hidden rounded-2xl border border-slate-200 bg-[#F8FAFC] shadow-inner sm:h-52">
                     <svg className="h-full w-full" viewBox="0 0 560 220" fill="none">
                       <rect width="560" height="220" fill="#F8FAFC" />
 
@@ -1140,16 +985,16 @@ export default function Home() {
                       })}
                     </svg>
 
-                    <div className="absolute left-3 top-2.5 rounded-xl border border-slate-200/90 bg-white/95 px-3 py-1 text-[11px] font-bold text-slate-800 shadow-xs backdrop-blur-xs">
+                    <div className="absolute left-2.5 top-2.5 max-w-[92%] truncate rounded-xl border border-slate-200/90 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-slate-800 shadow-xs backdrop-blur-xs sm:left-3 sm:px-3 sm:text-[11px]">
                       {activeRoute.corridor} • {activeRoute.stops} Stops
                     </div>
-                    <div className="absolute bottom-2.5 right-3 rounded-xl border border-purple-200 bg-purple-50/95 px-3 py-1 text-[11px] font-bold text-purple-700 shadow-xs">
+                    <div className="hidden rounded-xl border border-purple-200 bg-purple-50/95 px-3 py-1 text-[11px] font-bold text-purple-700 shadow-xs sm:block sm:absolute sm:bottom-2.5 sm:right-3">
                       6 Active Corridors • Zero Overlap
                     </div>
                   </div>
 
                   <div className="mt-3 text-xs">
-                    <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200/80 bg-slate-50 px-3.5 py-2.5 text-slate-700">
+                    <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200/80 bg-slate-50 px-3 py-2.5 text-slate-700 sm:px-3.5">
                       <span className="font-bold text-purple-600">
                         ● {activeRoute.name}
                       </span>
@@ -1164,9 +1009,8 @@ export default function Home() {
                 </div>
               </ScrollReveal>
 
-              {/* Right iPhone Mockup */}
               <ScrollReveal variant="slide-left" delayMs={140} threshold={0.08} className="lg:col-span-3">
-                <div className="relative rounded-[44px] border-4 border-slate-800 bg-slate-900 p-3.5 shadow-2xl">
+                <div className="relative mx-auto w-full max-w-[340px] rounded-[44px] border-4 border-slate-800 bg-slate-900 p-3.5 shadow-2xl md:max-w-none">
                   <div className="absolute left-1/2 top-5 z-20 flex h-5 w-28 -translate-x-1/2 transform items-center justify-end rounded-full bg-black px-2.5">
                     <div className="h-2.5 w-2.5 animate-pulse rounded-full bg-amber-400" />
                   </div>
@@ -1179,7 +1023,7 @@ export default function Home() {
 
                     <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-3">
                       <p className="flex items-center gap-1.5 font-bold text-emerald-700">
-                        <CheckCircle2 className="h-4 w-4" /> Successfully delivered
+                        <CheckCircle2 className="h-4 w-4 shrink-0" /> Successfully delivered
                       </p>
                       <p className="mt-1 text-[10px] text-slate-600">
                         Nov 18 at 3:45 PM • Left at front door
@@ -1231,13 +1075,13 @@ export default function Home() {
       </section>
 
       {/* ================= STREET-MAP ROUTE COMPARISON WITH ANIMATED CORRIDOR ================= */}
-      <section className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <section className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
         <ScrollReveal variant="slide-up" threshold={0.08}>
           <div className="mx-auto mb-8 max-w-3xl text-center">
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Tired of tangled routes?
             </h2>
-            <p className="mt-3 text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-lg">
               Delivery partners trust routes that make sense on the road. Deliver it builds clean sequences with no backtracking and no overlapping partner zones.
             </p>
             <div className="mt-4">
@@ -1253,7 +1097,7 @@ export default function Home() {
         </ScrollReveal>
 
         <ScrollReveal variant="large-soft" threshold={0.06}>
-          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-3.5 shadow-xl sm:p-6">
             <div className="relative grid grid-cols-1 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-md md:grid-cols-2">
               <style>{`
                 @keyframes flowPulse {
@@ -1297,10 +1141,10 @@ export default function Home() {
                 }
               `}</style>
 
-              <div className="relative flex flex-col justify-between border-b border-slate-200 bg-[#F8FAFC] p-5 md:border-b-0 md:border-r">
-                <div className="z-10 flex items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm">
-                    <Check className="h-3.5 w-3.5" /> Deliver it (1 Clean Path)
+              <div className="relative flex flex-col justify-between border-b border-slate-200 bg-[#F8FAFC] p-4 sm:p-5 md:border-b-0 md:border-r">
+                <div className="z-10 flex flex-wrap items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm sm:px-3.5">
+                    <Check className="h-3.5 w-3.5 shrink-0" /> Deliver it (1 Clean Path)
                   </span>
                   <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
                     Zero overlap
@@ -1308,7 +1152,7 @@ export default function Home() {
                 </div>
 
                 <div className="my-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs">
-                  <svg className="h-60 w-full sm:h-64" viewBox="0 0 430 250" fill="none">
+                  <svg className="h-52 w-full sm:h-64" viewBox="0 0 430 250" fill="none">
                     <rect width="430" height="250" fill="#F1F5F9" />
 
                     <rect x="20" y="20" width="96" height="52" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
@@ -1391,10 +1235,10 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative flex flex-col justify-between bg-[#FFFBFB] p-5">
-                <div className="z-10 flex items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm">
-                    <ShieldAlert className="h-3.5 w-3.5" /> Basic Planners (Zigzag Chaos)
+              <div className="relative flex flex-col justify-between bg-[#FFFBFB] p-4 sm:p-5">
+                <div className="z-10 flex flex-wrap items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm sm:px-3.5">
+                    <ShieldAlert className="h-3.5 w-3.5 shrink-0" /> Basic Planners (Zigzag Chaos)
                   </span>
                   <span className="rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-bold text-rose-600">
                     Criss-crossing
@@ -1402,7 +1246,7 @@ export default function Home() {
                 </div>
 
                 <div className="my-4 overflow-hidden rounded-2xl border border-rose-200/70 bg-white shadow-xs">
-                  <svg className="h-60 w-full sm:h-64" viewBox="0 0 430 250" fill="none">
+                  <svg className="h-52 w-full sm:h-64" viewBox="0 0 430 250" fill="none">
                     <rect width="430" height="250" fill="#F8FAFC" />
 
                     <rect x="20" y="20" width="96" height="52" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
@@ -1468,13 +1312,13 @@ export default function Home() {
       </section>
 
       {/* ================= BUSINESS INSIGHTS BENTO GRID SECTION ================= */}
-      <section className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <section className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
         <ScrollReveal variant="slide-up" threshold={0.08}>
           <div className="mx-auto mb-8 max-w-3xl text-center">
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Level up with partner insights
             </h2>
-            <p className="mt-3 text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-lg">
               Track delivery performance, compare schedules with real finish times, and spot ways to save every week.
             </p>
           </div>
@@ -1482,7 +1326,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
           <ScrollReveal variant="large-soft" delayMs={60} threshold={0.06} className="lg:col-span-6">
-            <div className="flex h-full flex-col justify-between rounded-3xl border border-indigo-100/80 bg-[#F4F6FC] p-6 sm:p-7">
+            <div className="flex h-full flex-col justify-between rounded-3xl border border-indigo-100/80 bg-[#F4F6FC] p-5 sm:p-7">
               <div>
                 <div className="flex flex-wrap items-center gap-3">
                   <h3 className="text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
@@ -1497,96 +1341,98 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-slate-100 bg-white p-5 shadow-lg shadow-slate-900/5">
-                <div className="mb-3 flex items-center justify-between">
-                  <span className="text-sm font-bold text-slate-900">Partners</span>
-                  <span className="text-xs font-medium text-slate-400">This week</span>
-                </div>
-
-                <div className="grid grid-cols-12 border-b border-slate-100 pb-2.5 text-[11px] font-medium text-slate-400">
-                  <div className="col-span-5">Partner</div>
-                  <div className="col-span-4">Success rate</div>
-                  <div className="col-span-1 text-right">Orders</div>
-                  <div className="col-span-2 text-right">Distance</div>
-                </div>
-
-                <div className="divide-y divide-slate-100 text-xs">
-                  <div className="grid grid-cols-12 items-center gap-2 py-3">
-                    <div className="col-span-5 flex items-center gap-2.5">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
-                        MC
-                      </span>
-                      <span className="truncate font-semibold text-slate-800">Maya Chen</span>
-                    </div>
-                    <div className="col-span-4 flex items-center gap-2">
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                        <div className="h-full w-[99%] rounded-full bg-blue-600" />
-                      </div>
-                      <span className="font-semibold text-slate-700">99%</span>
-                    </div>
-                    <div className="col-span-1 text-right font-medium text-slate-600">142</div>
-                    <div className="col-span-2 whitespace-nowrap text-right font-medium text-slate-600">
-                      386 km
-                    </div>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-100 bg-white p-4 shadow-lg shadow-slate-900/5 sm:p-5">
+                <div className="min-w-[340px]">
+                  <div className="mb-3 flex items-center justify-between">
+                    <span className="text-sm font-bold text-slate-900">Partners</span>
+                    <span className="text-xs font-medium text-slate-400">This week</span>
                   </div>
 
-                  <div className="grid grid-cols-12 items-center gap-2 py-3">
-                    <div className="col-span-5 flex items-center gap-2.5">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-400 text-[10px] font-bold text-slate-900">
-                        EY
-                      </span>
-                      <span className="truncate font-semibold text-slate-800">Eren Yeager</span>
-                    </div>
-                    <div className="col-span-4 flex items-center gap-2">
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                        <div className="h-full w-[97%] rounded-full bg-blue-600" />
-                      </div>
-                      <span className="font-semibold text-slate-700">97%</span>
-                    </div>
-                    <div className="col-span-1 text-right font-medium text-slate-600">128</div>
-                    <div className="col-span-2 whitespace-nowrap text-right font-medium text-slate-600">
-                      412 km
-                    </div>
+                  <div className="grid grid-cols-12 border-b border-slate-100 pb-2.5 text-[11px] font-medium text-slate-400">
+                    <div className="col-span-5">Partner</div>
+                    <div className="col-span-4">Success rate</div>
+                    <div className="col-span-1 text-right">Orders</div>
+                    <div className="col-span-2 text-right">Distance</div>
                   </div>
 
-                  <div className="grid grid-cols-12 items-center gap-2 py-3">
-                    <div className="col-span-5 flex items-center gap-2.5">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-400 text-[10px] font-bold text-slate-900">
-                        LO
-                      </span>
-                      <span className="truncate font-semibold text-slate-800">Luis Ortega</span>
-                    </div>
-                    <div className="col-span-4 flex items-center gap-2">
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                        <div className="h-full w-[95%] rounded-full bg-blue-600" />
+                  <div className="divide-y divide-slate-100 text-xs">
+                    <div className="grid grid-cols-12 items-center gap-2 py-3">
+                      <div className="col-span-5 flex min-w-0 items-center gap-2.5">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
+                          MC
+                        </span>
+                        <span className="truncate font-semibold text-slate-800">Maya Chen</span>
                       </div>
-                      <span className="font-semibold text-slate-700">95%</span>
+                      <div className="col-span-4 flex items-center gap-2">
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                          <div className="h-full w-[99%] rounded-full bg-blue-600" />
+                        </div>
+                        <span className="font-semibold text-slate-700">99%</span>
+                      </div>
+                      <div className="col-span-1 text-right font-medium text-slate-600">142</div>
+                      <div className="col-span-2 whitespace-nowrap text-right font-medium text-slate-600">
+                        386 km
+                      </div>
                     </div>
-                    <div className="col-span-1 text-right font-medium text-slate-600">117</div>
-                    <div className="col-span-2 whitespace-nowrap text-right font-medium text-slate-600">
-                      351 km
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-12 items-center gap-2 pt-3">
-                    <div className="col-span-5 flex items-center gap-1.5">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-pink-400 text-[10px] font-bold text-white">
-                        SP
-                      </span>
-                      <span className="truncate font-semibold text-slate-800">Sam Patterson</span>
-                      <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold text-amber-800">
-                        Coach
-                      </span>
-                    </div>
-                    <div className="col-span-4 flex items-center gap-2">
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                        <div className="h-full w-[86%] rounded-full bg-amber-400" />
+                    <div className="grid grid-cols-12 items-center gap-2 py-3">
+                      <div className="col-span-5 flex min-w-0 items-center gap-2.5">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-400 text-[10px] font-bold text-slate-900">
+                          EY
+                        </span>
+                        <span className="truncate font-semibold text-slate-800">Eren Yeager</span>
                       </div>
-                      <span className="font-semibold text-slate-700">86%</span>
+                      <div className="col-span-4 flex items-center gap-2">
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                          <div className="h-full w-[97%] rounded-full bg-blue-600" />
+                        </div>
+                        <span className="font-semibold text-slate-700">97%</span>
+                      </div>
+                      <div className="col-span-1 text-right font-medium text-slate-600">128</div>
+                      <div className="col-span-2 whitespace-nowrap text-right font-medium text-slate-600">
+                        412 km
+                      </div>
                     </div>
-                    <div className="col-span-1 text-right font-medium text-slate-600">96</div>
-                    <div className="col-span-2 whitespace-nowrap text-right font-medium text-slate-600">
-                      298 km
+
+                    <div className="grid grid-cols-12 items-center gap-2 py-3">
+                      <div className="col-span-5 flex min-w-0 items-center gap-2.5">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-400 text-[10px] font-bold text-slate-900">
+                          LO
+                        </span>
+                        <span className="truncate font-semibold text-slate-800">Luis Ortega</span>
+                      </div>
+                      <div className="col-span-4 flex items-center gap-2">
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                          <div className="h-full w-[95%] rounded-full bg-blue-600" />
+                        </div>
+                        <span className="font-semibold text-slate-700">95%</span>
+                      </div>
+                      <div className="col-span-1 text-right font-medium text-slate-600">117</div>
+                      <div className="col-span-2 whitespace-nowrap text-right font-medium text-slate-600">
+                        351 km
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-12 items-center gap-2 pt-3">
+                      <div className="col-span-5 flex min-w-0 items-center gap-1.5">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-pink-400 text-[10px] font-bold text-white">
+                          SP
+                        </span>
+                        <span className="truncate font-semibold text-slate-800">Sam Patterson</span>
+                        <span className="shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold text-amber-800">
+                          Coach
+                        </span>
+                      </div>
+                      <div className="col-span-4 flex items-center gap-2">
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                          <div className="h-full w-[86%] rounded-full bg-amber-400" />
+                        </div>
+                        <span className="font-semibold text-slate-700">86%</span>
+                      </div>
+                      <div className="col-span-1 text-right font-medium text-slate-600">96</div>
+                      <div className="col-span-2 whitespace-nowrap text-right font-medium text-slate-600">
+                        298 km
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1596,7 +1442,7 @@ export default function Home() {
 
           <div className="flex flex-col gap-6 lg:col-span-6">
             <ScrollReveal variant="large-soft" delayMs={150} threshold={0.06}>
-              <div className="grid flex-1 grid-cols-1 items-center gap-5 rounded-3xl border border-indigo-100/80 bg-[#F4F6FC] p-6 sm:grid-cols-12">
+              <div className="grid flex-1 grid-cols-1 items-center gap-5 rounded-3xl border border-indigo-100/80 bg-[#F4F6FC] p-5 sm:grid-cols-12 sm:p-6">
                 <div className="sm:col-span-5">
                   <h3 className="text-xl font-extrabold tracking-tight text-slate-900">
                     Planned vs actuals
@@ -1608,7 +1454,7 @@ export default function Home() {
 
                 <div className="sm:col-span-7">
                   <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-lg shadow-slate-900/5">
-                    <div className="mb-3 flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <div className="mb-3 flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
                       <div className="flex items-center gap-2">
                         <span className="h-3.5 w-1 rounded-full bg-indigo-600" />
                         <span className="text-xs font-bold text-slate-800">Route 4 • Eren Y.</span>
@@ -1620,7 +1466,7 @@ export default function Home() {
 
                     <div className="space-y-2.5 text-[11px]">
                       <div className="flex items-center justify-between gap-3">
-                        <span className="w-12 font-medium text-slate-400">Planned</span>
+                        <span className="w-12 shrink-0 font-medium text-slate-400">Planned</span>
                         <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
                           <div className="h-full w-[82%] rounded-full bg-pink-500" />
                         </div>
@@ -1630,7 +1476,7 @@ export default function Home() {
                       </div>
 
                       <div className="flex items-center justify-between gap-3">
-                        <span className="w-12 font-medium text-slate-400">Actual</span>
+                        <span className="w-12 shrink-0 font-medium text-slate-400">Actual</span>
                         <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
                           <div className="h-full w-[94%] rounded-full bg-blue-600" />
                         </div>
@@ -1645,7 +1491,7 @@ export default function Home() {
             </ScrollReveal>
 
             <ScrollReveal variant="large-soft" delayMs={230} threshold={0.06}>
-              <div className="relative grid flex-1 grid-cols-1 items-center gap-5 overflow-hidden rounded-3xl border border-indigo-100/80 bg-[#F4F6FC] p-6 sm:grid-cols-12">
+              <div className="relative grid flex-1 grid-cols-1 items-center gap-5 overflow-hidden rounded-3xl border border-indigo-100/80 bg-[#F4F6FC] p-5 sm:grid-cols-12 sm:p-6">
                 <div className="z-10 sm:col-span-6">
                   <h3 className="text-xl font-extrabold tracking-tight text-slate-900">
                     Download CSVs
@@ -1690,14 +1536,14 @@ export default function Home() {
       </section>
 
       {/* ================= WORKS WITH YOUR STACK SECTION ================= */}
-      <section className="relative border-t border-indigo-100/60 bg-[#F5F7FF] py-14">
+      <section className="relative border-t border-indigo-100/60 bg-[#F5F7FF] py-12 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal variant="slide-up" threshold={0.08}>
             <div className="mx-auto mb-9 max-w-3xl text-center">
-              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
                 Works with your stack
               </h2>
-              <p className="mt-3 text-base leading-relaxed text-slate-600 sm:text-lg">
+              <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-lg">
                 Connect Deliver it with the storefronts, automations, and APIs your operation already uses.
               </p>
             </div>
@@ -1705,7 +1551,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             <ScrollReveal variant="large-soft" delayMs={0} threshold={0.08}>
-              <div className="flex h-full flex-col justify-between rounded-2xl border border-slate-100 bg-white p-6 shadow-md shadow-indigo-950/[0.03] transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200">
+              <div className="flex h-full flex-col justify-between rounded-2xl border border-slate-100 bg-white p-5 shadow-md shadow-indigo-950/[0.03] transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200 sm:p-6">
                 <div>
                   <div className="mb-4 flex items-center gap-3">
                     <ScrollReveal variant="square-pop" delayMs={70} threshold={0.06}>
@@ -1745,7 +1591,7 @@ export default function Home() {
             </ScrollReveal>
 
             <ScrollReveal variant="large-soft" delayMs={100} threshold={0.08}>
-              <div className="flex h-full flex-col justify-between rounded-2xl border border-slate-100 bg-white p-6 shadow-md shadow-indigo-950/[0.03] transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200">
+              <div className="flex h-full flex-col justify-between rounded-2xl border border-slate-100 bg-white p-5 shadow-md shadow-indigo-950/[0.03] transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200 sm:p-6">
                 <div>
                   <div className="mb-4 flex items-center gap-3">
                     <ScrollReveal variant="square-pop" delayMs={150} threshold={0.06}>
@@ -1772,7 +1618,7 @@ export default function Home() {
             </ScrollReveal>
 
             <ScrollReveal variant="large-soft" delayMs={200} threshold={0.08}>
-              <div className="flex h-full flex-col justify-between rounded-2xl border border-slate-100 bg-white p-6 shadow-md shadow-indigo-950/[0.03] transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200">
+              <div className="flex h-full flex-col justify-between rounded-2xl border border-slate-100 bg-white p-5 shadow-md shadow-indigo-950/[0.03] transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200 sm:p-6">
                 <div>
                   <div className="mb-4 flex items-center gap-3">
                     <ScrollReveal variant="square-pop" delayMs={230} threshold={0.06}>
@@ -1806,7 +1652,7 @@ export default function Home() {
             </ScrollReveal>
 
             <ScrollReveal variant="large-soft" delayMs={300} threshold={0.08}>
-              <div className="relative flex h-full flex-col justify-between rounded-2xl border border-slate-100 bg-white p-6 shadow-md shadow-indigo-950/[0.03] transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200">
+              <div className="relative flex h-full flex-col justify-between rounded-2xl border border-slate-100 bg-white p-5 shadow-md shadow-indigo-950/[0.03] transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200 sm:p-6">
                 <span className="absolute right-4 top-4 rounded-full bg-amber-100/80 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-amber-800">
                   NEW
                 </span>
@@ -1856,15 +1702,15 @@ export default function Home() {
       </section>
 
       {/* ================= WORKS ESPECIALLY WELL FOR THESE INDUSTRIES ================= */}
-      <section className="relative border-t border-indigo-100/60 bg-[#F6F7FE] py-14">
+      <section className="relative border-t border-indigo-100/60 bg-[#F6F7FE] py-12 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal variant="slide-up" threshold={0.08}>
             <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
               <div>
-                <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl">
+                <h2 className="text-2xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl">
                   Works especially well for these industries
                 </h2>
-                <p className="mt-2.5 text-base text-slate-600">
+                <p className="mt-2.5 text-sm text-slate-600 sm:text-base">
                   Deliver it is built for local delivery partners. See how it fits your operation.
                 </p>
               </div>
@@ -1912,9 +1758,9 @@ export default function Home() {
                 variant="large-soft"
                 delayMs={idx * 95}
                 threshold={0.06}
-                className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-[23.6%]"
+                className="w-[85%] shrink-0 snap-start sm:w-[47%] lg:w-[23.6%]"
               >
-                <article className="group relative h-[350px] w-full overflow-hidden rounded-3xl bg-slate-900 shadow-md transition-transform duration-300 hover:-translate-y-1">
+                <article className="group relative h-[330px] w-full overflow-hidden rounded-3xl bg-slate-900 shadow-md transition-transform duration-300 hover:-translate-y-1 sm:h-[350px]">
                   <img
                     src={industry.image}
                     alt={industry.title}
@@ -1944,11 +1790,11 @@ export default function Home() {
       </section>
 
       {/* ================= PRE-FOOTER DEMO CTA ================= */}
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         <ScrollReveal variant="large-soft" threshold={0.08}>
-          <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-slate-200 bg-white px-6 py-8 text-center shadow-lg sm:px-10 md:flex-row md:text-left">
+          <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-slate-200 bg-white px-5 py-7 text-center shadow-lg sm:px-10 sm:py-8 md:flex-row md:text-left">
             <div>
-              <h2 className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-2xl font-extrabold tracking-tight text-transparent sm:text-3xl">
+              <h2 className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-xl font-extrabold tracking-tight text-transparent sm:text-3xl">
                 Ready to clean up your delivery routes?
               </h2>
               <p className="mt-1.5 bg-gradient-to-r from-purple-700 via-indigo-600 to-blue-600 bg-clip-text text-sm font-medium text-transparent sm:text-base">
@@ -1956,17 +1802,17 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="flex shrink-0 flex-wrap items-center justify-center gap-3">
-             <Link
-            href="/demo"
-            className="w-full rounded-xl border border-slate-300 bg-white px-7 py-4 text-center text-sm font-semibold text-slate-700 shadow-xs transition-all hover:bg-slate-50 hover:text-slate-900 active:scale-95 sm:w-auto sm:text-base"
-          >
+            <div className="flex w-full shrink-0 flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
+              <Link
+                href="/demo"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 text-center text-sm font-semibold text-slate-700 shadow-xs transition-all hover:bg-slate-50 hover:text-slate-900 active:scale-95 sm:w-auto sm:px-7 sm:py-4 sm:text-base"
+              >
                 <span>Get the demo</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/signup"
-                className="rounded-xl border border-indigo-200 bg-indigo-50/70 px-5 py-3.5 text-sm font-semibold text-indigo-700 transition-colors hover:bg-indigo-100"
+                className="inline-flex w-full items-center justify-center rounded-xl border border-indigo-200 bg-indigo-50/70 px-5 py-3.5 text-sm font-semibold text-indigo-700 transition-colors hover:bg-indigo-100 sm:w-auto"
               >
                 Start free trial
               </Link>
