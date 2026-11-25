@@ -654,16 +654,20 @@ export default function Home() {
         )}
       </header>
 
-      {/* ================= AESTHETIC LEFT-ALIGNED EARTH HERO ================= */}
+     {/* ================= AESTHETIC LEFT-ALIGNED EARTH HERO ================= */}
       <section
         ref={heroRef}
         className="relative z-10 min-h-[520px] w-full overflow-hidden bg-black text-white sm:min-h-[600px] lg:min-h-[660px]"
       >
-        {/* Full-bleed Earth image (unchanged) */}
-        <img
-          src="/images/pexels-zelch-30596223.jpg"
-          alt="Earth from orbit along global delivery corridors"
-          className="absolute inset-0 h-full w-full object-cover object-[58%_52%] sm:object-[54%_50%] lg:object-[50%_48%]"
+        {/* Full-bleed Earth orbital video */}
+        <video
+          src="/7051724b72.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label="Earth from orbit along global delivery corridors"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-[58%_52%] sm:object-[54%_50%] lg:object-[50%_48%]"
         />
 
         {/* Atmospheric gradients & subtle glow for clean left-side hierarchy */}
