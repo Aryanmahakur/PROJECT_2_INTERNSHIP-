@@ -808,7 +808,7 @@ export default function LiveMapPage(): React.ReactElement {
               <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-wrap items-center gap-2 rounded-full border border-white/15 bg-zinc-950/85 px-3 py-1.5 text-[11px] font-semibold text-zinc-200 shadow-lg backdrop-blur-md sm:left-3.5 sm:top-3.5 sm:gap-3 sm:px-3.5">
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                  <span>Pickup</span>
+                  <span>Restaurant </span>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-rose-400" />

@@ -8,7 +8,6 @@ import {
   ArrowRight,
   Utensils,
   Navigation,
-  Cpu,
   Layers,
   Zap,
   Menu,
@@ -120,7 +119,7 @@ function SlideFromSide({
           }
         });
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.08, rootMargin: '0px 0px -24px 0px' }
     );
 
     observer.observe(node);
@@ -128,7 +127,7 @@ function SlideFromSide({
   }, [immediate]);
 
   const hiddenTranslate =
-    from === 'left' ? '-translate-x-10 opacity-0' : 'translate-x-10 opacity-0';
+    from === 'left' ? '-translate-x-8 opacity-0' : 'translate-x-8 opacity-0';
 
   return (
     <div
@@ -166,8 +165,61 @@ export default function CapabilitiesPage() {
             transform: translateY(0) scale(1);
           }
         }
+        @keyframes riderGlide {
+          0% {
+            left: 6%;
+            transform: translateY(-50%) scale(0.95);
+          }
+          50% {
+            transform: translateY(calc(-50% - 3px)) scale(1.04);
+          }
+          100% {
+            left: calc(94% - 14px);
+            transform: translateY(-50%) scale(0.95);
+          }
+        }
+        @keyframes pulsePingRing {
+          0% {
+            transform: scale(0.8);
+            opacity: 0.85;
+          }
+          100% {
+            transform: scale(2.1);
+            opacity: 0;
+          }
+        }
+        @keyframes barBounce {
+          0%, 100% {
+            transform: scaleY(0.35);
+          }
+          50% {
+            transform: scaleY(1);
+          }
+        }
         .animate-metric-swap {
           animation: metricSwap 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .animate-rider-glide {
+          animation: riderGlide 3.4s ease-in-out infinite alternate;
+        }
+        .animate-ping-ring {
+          animation: pulsePingRing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        .animate-bar-1 {
+          animation: barBounce 1.1s ease-in-out infinite;
+          transform-origin: bottom;
+        }
+        .animate-bar-2 {
+          animation: barBounce 1.1s ease-in-out 0.22s infinite;
+          transform-origin: bottom;
+        }
+        .animate-bar-3 {
+          animation: barBounce 1.1s ease-in-out 0.44s infinite;
+          transform-origin: bottom;
+        }
+        .animate-bar-4 {
+          animation: barBounce 1.1s ease-in-out 0.66s infinite;
+          transform-origin: bottom;
         }
       `}</style>
 
@@ -219,7 +271,12 @@ export default function CapabilitiesPage() {
                   className="inline-flex cursor-pointer items-center gap-1 whitespace-nowrap text-sm font-medium text-zinc-300 transition-colors hover:text-white"
                 >
                   <span>Account</span>
-                  <svg viewBox="0 0 16 16" fill="none" className="h-4 w-4 text-zinc-400" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="h-4 w-4 text-zinc-400"
+                    aria-hidden="true"
+                  >
                     <path
                       d="M4 6L8 10L12 6"
                       stroke="currentColor"
@@ -309,8 +366,8 @@ export default function CapabilitiesPage() {
           )}
         </header>
 
-        {/* ================= TOP PAGE HEADING ================= */}
-        <section className="mx-auto max-w-3xl px-4 pb-6 pt-8 text-center sm:px-6 sm:pt-12">
+      {/* ================= TOP PAGE HEADING ================= */}
+        <section className="mx-auto mt-8 max-w-3xl px-4 pb-4 pt-5 text-center sm:mt-12 sm:px-6 sm:pb-5 sm:pt-6">
           <SlideFromSide from="left" delay={30} immediate>
             <h1 className="text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-5xl">
               How Deliver it{' '}
@@ -318,7 +375,7 @@ export default function CapabilitiesPage() {
                 calculates arrival times
               </span>
             </h1>
-            <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:text-base">
+            <p className="mx-auto mt-2.5 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:text-base">
               Kitchen prep modeling and road routing working together for local spots or
               custom coordinates worldwide.
             </p>
@@ -326,43 +383,82 @@ export default function CapabilitiesPage() {
         </section>
 
         {/* ================= HERO + INTERACTIVE PRODUCT SANDBOX ================= */}
-        <section className="mx-auto max-w-6xl px-3 pb-14 pt-4 sm:px-6 sm:pb-16 lg:px-8">
-          <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-12">
-            {/* Left Copy — slides in from left */}
-            <SlideFromSide from="left" delay={60} immediate className="lg:col-span-6">
-              <div className="space-y-5 sm:space-y-6">
-                <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3.5 py-1 text-xs font-semibold text-purple-300">
-                  <Cpu className="h-3.5 w-3.5 shrink-0 text-amber-400" />
-                  <span>Dual-Model ETD Architecture</span>
+        <section className="mx-auto mt-6 mb-5 max-w-6xl px-3 pt-2 pb-5 sm:mt-8 sm:mb-6 sm:px-6 sm:pt-3 sm:pb-6 lg:px-8">
+          <div className="grid items-start gap-8 sm:gap-10 lg:grid-cols-12 lg:items-stretch">
+            {/* Left Copy + Animated Telemetry Strip — slides in from left */}
+            <SlideFromSide
+              from="left"
+              delay={60}
+              immediate
+              className="flex flex-col lg:col-span-6"
+            >
+              <div className="mt-6 flex h-full flex-col justify-between gap-5 sm:mt-8">
+                <div className="space-y-4 sm:space-y-5">
+                  <h2 className="text-2xl font-extrabold leading-[1.15] tracking-tight text-white sm:text-4xl">
+                    Precision delivery estimates,{' '}
+                    <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-purple-400 bg-clip-text text-transparent">
+                      anywhere on Earth.
+                    </span>
+                  </h2>
+
+                  <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
+                    Test how <strong className="text-zinc-200">Deliver it</strong> fuses
+                    machine-learned kitchen prep predictions with live street-network routing—using
+                    either pre-registered local spots or any custom coordinates worldwide.
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-3 pt-1">
+                    <Link
+                      href="/demo"
+                      className="inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-3 text-sm font-bold text-zinc-950 transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-300 sm:px-6"
+                    >
+                      <span>Open Full Map Sandbox</span>
+                      <ArrowRight className="h-4 w-4 shrink-0" />
+                    </Link>
+                    <Link
+                      href="/sectors"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-zinc-200 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10"
+                    >
+                      Explore Sectors
+                    </Link>
+                  </div>
                 </div>
 
-                <h2 className="text-2xl font-extrabold leading-[1.15] tracking-tight text-white sm:text-4xl">
-                  Precision delivery estimates,{' '}
-                  <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-purple-400 bg-clip-text text-transparent">
-                    anywhere on Earth.
-                  </span>
-                </h2>
+                {/* Animated Live Dispatch & Route Pulse Box */}
+                <div className="rounded-2xl border border-white/10 bg-zinc-950/80 p-4 shadow-xl">
+                  <div className="flex items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                    <span className="flex items-center gap-2 text-amber-300">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping-ring absolute inline-flex h-full w-full rounded-full bg-amber-400" />
+                        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-400" />
+                      </span>
+                      Live Dispatch Pulse
+                    </span>
 
-                <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
-                  Test how <strong className="text-zinc-200">Deliver it</strong> fuses
-                  machine-learned kitchen prep predictions with live street-network routing—using
-                  either pre-registered local spots or any custom coordinates worldwide.
-                </p>
+                    <div className="flex h-4 items-end gap-1" aria-hidden="true">
+                      <span className="animate-bar-1 h-3.5 w-1 rounded-full bg-purple-400" />
+                      <span className="animate-bar-2 h-4 w-1 rounded-full bg-amber-400" />
+                      <span className="animate-bar-3 h-3 w-1 rounded-full bg-purple-300" />
+                      <span className="animate-bar-4 h-4 w-1 rounded-full bg-amber-300" />
+                    </div>
+                  </div>
 
-                <div className="flex flex-wrap items-center gap-3 pt-1">
-                  <Link
-                    href="/demo"
-                    className="inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-3 text-sm font-bold text-zinc-950 transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-300 sm:px-6"
-                  >
-                    <span>Open Full Map Sandbox</span>
-                    <ArrowRight className="h-4 w-4 shrink-0" />
-                  </Link>
-                  <Link
-                    href="/sectors"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-zinc-200 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10"
-                  >
-                    Explore Sectors
-                  </Link>
+                  {/* Animated Track Between Kitchen & Dropoff */}
+                  <div className="relative mt-4 flex h-8 items-center">
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-purple-500 ring-4 ring-purple-500/20" />
+                    <div className="relative mx-2 h-[2px] flex-1 overflow-visible rounded-full bg-gradient-to-r from-purple-500/60 via-amber-400/50 to-emerald-400/60">
+                      <span className="animate-rider-glide absolute top-1/2 flex h-5 w-5 items-center justify-center rounded-full border border-amber-200 bg-amber-400 text-zinc-950 shadow-[0_0_14px_rgba(251,191,36,0.85)]">
+                        <Navigation className="h-2.5 w-2.5 rotate-90" />
+                      </span>
+                    </div>
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-400 ring-4 ring-emerald-400/20" />
+                  </div>
+
+                  <div className="mt-2 flex items-center justify-between font-mono text-[10px] text-zinc-400">
+                    <span>Kitchen Prep: {activeData.prep}m</span>
+                    <span className="text-amber-300">ETA: {totalEtd}m</span>
+                    <span>Dropoff: {activeData.distance}</span>
+                  </div>
                 </div>
               </div>
             </SlideFromSide>
@@ -372,9 +468,9 @@ export default function CapabilitiesPage() {
               from="right"
               delay={140}
               immediate
-              className="mx-auto w-full max-w-xl lg:col-span-6"
+              className="mx-auto flex w-full max-w-xl flex-col lg:col-span-6 lg:max-w-none"
             >
-              <div className="overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/90 shadow-2xl transition-all duration-300 hover:border-white/20">
+              <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/90 shadow-2xl transition-all duration-300 hover:border-white/20">
                 {/* Console Top Mode Switcher */}
                 <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-white/10 bg-zinc-950/60 px-3.5 py-3 sm:px-4">
                   <div className="flex items-center gap-1.5">
@@ -455,7 +551,7 @@ export default function CapabilitiesPage() {
                 </div>
 
                 {/* Simulated Vector Map + Route Line */}
-                <div className="relative h-36 w-full overflow-hidden bg-zinc-950 px-4 py-3.5 sm:px-5">
+                <div className="relative h-36 min-h-[144px] w-full flex-1 overflow-hidden bg-zinc-950 px-4 py-3.5 sm:px-5">
                   <div
                     aria-hidden="true"
                     className="absolute inset-0 opacity-20"
