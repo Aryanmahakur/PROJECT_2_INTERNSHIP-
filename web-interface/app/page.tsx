@@ -152,6 +152,77 @@ function ScrollReveal({
   );
 }
 
+function SeamlessEarthOrbitalVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [fading, setFading] = useState(false);
+  const isFadingRef = useRef(false);
+
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    vid.play().catch(() => {});
+
+    if (prefersReduced) {
+      vid.loop = true;
+      return;
+    }
+
+    vid.loop = false;
+    let fadeTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    const handleTimeUpdate = () => {
+      if (!vid.duration || Number.isNaN(vid.duration)) return;
+      const remaining = vid.duration - vid.currentTime;
+      if (remaining <= 0.75 && !isFadingRef.current) {
+        isFadingRef.current = true;
+        setFading(true);
+        fadeTimeout = setTimeout(() => {
+          vid.currentTime = 0;
+          vid.play().catch(() => {});
+          setFading(false);
+          isFadingRef.current = false;
+        }, 550);
+      }
+    };
+
+    const handleEnded = () => {
+      if (fadeTimeout) clearTimeout(fadeTimeout);
+      vid.currentTime = 0;
+      vid.play().catch(() => {});
+      setFading(false);
+      isFadingRef.current = false;
+    };
+
+    vid.addEventListener('timeupdate', handleTimeUpdate);
+    vid.addEventListener('ended', handleEnded);
+
+    return () => {
+      if (fadeTimeout) clearTimeout(fadeTimeout);
+      vid.removeEventListener('timeupdate', handleTimeUpdate);
+      vid.removeEventListener('ended', handleEnded);
+    };
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src="/7051724b72.mp4"
+      muted
+      playsInline
+      preload="auto"
+      aria-label="Earth from orbit along global delivery corridors"
+      className={`pointer-events-none absolute inset-0 h-full w-full scale-[1.06] object-cover object-[76%_20%] contrast-[1.08] saturate-[1.14] brightness-[1.04] transition-opacity duration-500 ease-in-out will-change-[opacity,transform] ${
+        fading ? 'opacity-20' : 'opacity-100'
+      }`}
+    />
+  );
+}
+
 const INDUSTRIES: IndustryItem[] = [
   {
     id: 'food-beverage',
@@ -382,9 +453,9 @@ export default function Home() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsHeroActive(entry.isIntersecting && entry.intersectionRatio > 0.2);
+        setIsHeroActive(entry.isIntersecting);
       },
-      { threshold: [0, 0.2, 0.5, 0.8] }
+      { threshold: 0 }
     );
 
     observer.observe(heroEl);
@@ -453,7 +524,7 @@ export default function Home() {
         }
       `}</style>
 
-      {/* ================= NON-STICKY HEADER / NAVBAR ================= */}
+      {/* ================= HEADER ================= */}
       <header className="relative z-50 mx-auto w-full max-w-6xl px-3 pt-3 sm:px-6 sm:pt-4 lg:px-8">
         <div
           className={`flex items-center justify-between gap-2 rounded-full px-3.5 py-2.5 shadow-2xl backdrop-blur-xl transition-all duration-500 sm:px-6 sm:py-3 ${
@@ -654,36 +725,26 @@ export default function Home() {
         )}
       </header>
 
-     {/* ================= AESTHETIC LEFT-ALIGNED EARTH HERO ================= */}
+      {/* ================= HERO TOUCHING VERY TOP OF SCREEN ================= */}
       <section
         ref={heroRef}
-        className="relative z-10 min-h-[520px] w-full overflow-hidden bg-black text-white sm:min-h-[600px] lg:min-h-[660px]"
+        className="relative z-10 -mt-[76px] min-h-[540px] w-full overflow-hidden bg-black text-white sm:-mt-[84px] sm:min-h-[620px] lg:-mt-[88px] lg:min-h-[680px]"
       >
-        {/* Full-bleed Earth orbital video */}
-        <video
-          src="/7051724b72.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          aria-label="Earth from orbit along global delivery corridors"
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-[58%_52%] sm:object-[54%_50%] lg:object-[50%_48%]"
-        />
+        <SeamlessEarthOrbitalVideo />
 
-        {/* Atmospheric gradients & subtle glow for clean left-side hierarchy */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/15" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/85 via-black/40 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-transparent" />
         <div className="pointer-events-none absolute -left-24 top-24 h-80 w-80 rounded-full bg-purple-600/20 blur-[120px]" />
         <div className="pointer-events-none absolute bottom-12 left-32 h-64 w-64 rounded-full bg-amber-400/10 blur-[110px]" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
-        {/* Left-aligned hero content */}
-        <div className="relative z-10 mx-auto flex min-h-[520px] max-w-7xl flex-col justify-start px-4 pb-12 pt-14 sm:min-h-[600px] sm:px-8 sm:pb-14 sm:pt-20 lg:min-h-[660px] lg:px-10 lg:pt-28">
-          <div className="mr-auto flex w-full max-w-none flex-col items-start text-left">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black via-black/55 to-transparent backdrop-blur-[6px] [mask-image:linear-gradient(to_top,black_18%,transparent_100%)]" />
+        <div className="pointer-events-none absolute inset-x-0 -bottom-6 h-16 bg-black/80 blur-xl" />
+
+        <div className="relative z-10 mx-auto flex min-h-[540px] max-w-7xl flex-col justify-center px-4 py-12 text-center text-white sm:min-h-[620px] sm:px-8 sm:py-14 lg:min-h-[680px] lg:px-10">
+          <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
             <h1 className="hero-stagger-1 text-3xl font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
-              <span className="block sm:whitespace-nowrap">
-                We deliver the best route
-              </span>
-              <span className="mt-1 block bg-gradient-to-r from-violet-300 via-purple-200 to-amber-200 bg-clip-text text-transparent sm:whitespace-nowrap">
+              <span className="block text-white">We deliver the best route</span>
+              <span className="mt-1 block bg-gradient-to-r from-violet-300 via-purple-200 to-amber-200 bg-clip-text text-transparent">
                 On every delivery path
               </span>
             </h1>
@@ -691,7 +752,7 @@ export default function Home() {
               Smarter stop sequences and smoother shift handoffs. Live customer tracking built to cut up to 25% of delivery costs.
             </p>
 
-            <div className="hero-stagger-3 mt-6 flex flex-wrap items-center justify-start gap-4 sm:mt-7">
+            <div className="hero-stagger-3 mt-6 flex flex-wrap items-center justify-center gap-4 sm:mt-7">
               <Link
                 href="/demo"
                 className="group inline-flex items-center justify-center gap-2.5 rounded-xl bg-[#ffb703] px-6 py-3 text-sm font-bold text-slate-950 shadow-xl shadow-amber-500/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffaa00] hover:shadow-amber-400/35 active:scale-[0.98] sm:px-7 sm:py-3.5 sm:text-base"
@@ -704,7 +765,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= BRAND LOGOS STRIP (black while hero active) ================= */}
+      {/* ================= BRAND LOGOS STRIP ================= */}
       <div
         className={`relative z-10 w-full transition-colors duration-700 ease-out ${
           isHeroActive ? 'bg-black text-white' : 'bg-white text-slate-900'
@@ -758,6 +819,23 @@ export default function Home() {
 
       {/* ================= SHOWCASE SECTION (Map UI & Dashboard) ================= */}
       <section className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        <div className="mx-auto mb-7 max-w-3xl text-center">
+          <h2
+            className={`text-2xl font-extrabold tracking-tight transition-colors duration-700 sm:text-4xl ${
+              isHeroActive ? 'text-white' : 'text-slate-900'
+            }`}
+          >
+            One dispatch view. Every stop in sync.
+          </h2>
+          <p
+            className={`mt-2.5 text-sm leading-relaxed transition-colors duration-700 sm:text-base ${
+              isHeroActive ? 'text-slate-300' : 'text-slate-600'
+            }`}
+          >
+            Give partners turn-by-turn guidance, dispatchers live corridor control, and customers real-time arrival updates.
+          </p>
+        </div>
+
         <ScrollReveal variant="large-soft" threshold={0.06}>
           <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-b from-white via-purple-50/25 to-slate-50/80 p-4 shadow-xl backdrop-blur-xl sm:p-8">
             <div className="mb-6 flex flex-col items-center justify-between gap-3 sm:flex-row">

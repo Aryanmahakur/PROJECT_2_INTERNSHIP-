@@ -383,17 +383,17 @@ export default function CapabilitiesPage() {
         </section>
 
         {/* ================= HERO + INTERACTIVE PRODUCT SANDBOX ================= */}
-        <section className="mx-auto mt-6 mb-5 max-w-6xl px-3 pt-2 pb-5 sm:mt-8 sm:mb-6 sm:px-6 sm:pt-3 sm:pb-6 lg:px-8">
+        <section className="mx-auto mt-5.5 mb-5 max-w-6xl px-3 pt-2 pb-5 sm:mt-8 sm:mb-6 sm:px-6 sm:pt-3 sm:pb-6 lg:px-8">
           <div className="grid items-start gap-8 sm:gap-10 lg:grid-cols-12 lg:items-stretch">
-            {/* Left Copy + Animated Telemetry Strip — slides in from left */}
+           {/* Left Copy + Animated Telemetry Strip — slides in from left */}
             <SlideFromSide
               from="left"
               delay={60}
               immediate
               className="flex flex-col lg:col-span-6"
             >
-              <div className="mt-6 flex h-full flex-col justify-between gap-5 sm:mt-8">
-                <div className="space-y-4 sm:space-y-5">
+              <div className="mt-1 flex h-full flex-col justify-between gap-5 sm:mt-2">
+                <div className="-mt-1 space-y-4 sm:-mt-2 sm:space-y-5">
                   <h2 className="text-2xl font-extrabold leading-[1.15] tracking-tight text-white sm:text-4xl">
                     Precision delivery estimates,{' '}
                     <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-purple-400 bg-clip-text text-transparent">
