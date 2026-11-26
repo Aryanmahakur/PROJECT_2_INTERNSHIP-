@@ -8,16 +8,14 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# Enable CORS so the browser frontend can talk to the backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Resolve path relative to this file (Map/app.py -> project root -> Data/joblib/...)
 BASE_DIR = Path(__file__).resolve().parent.parent
 model_path = BASE_DIR / "Data" / "joblib" / "best_random_forest_pipeline.joblib"
 
@@ -38,6 +36,7 @@ class PredictionRequest(BaseModel):
 
 
 @app.get("/")
+@app.head("/")
 def read_root():
     return {"status": "Delivery ML Backend is online!"}
 
@@ -80,7 +79,6 @@ def predict_delivery_time(req: PredictionRequest):
                     input_data[col] = 0
             input_data = input_data[expected_features]
 
-        # Model prediction representing time (e.g., food prep / processing time)
         predicted_prep_minutes = float(model.predict(input_data)[0])
 
         return {

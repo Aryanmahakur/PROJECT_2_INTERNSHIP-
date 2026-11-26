@@ -40,3 +40,13 @@ node_modules/
 # Logs and OS files
 npm-debug.log*
 .DS_Store
+# Dataset and generated outputs
+Data/*.csv
+Data/plots/
+Data/joblib/
+!Data/joblib/best_random_forest_pipeline.joblib
+
+# Saved machine-learning models
+*.joblib
+!best_random_forest_pipeline.joblib
+*.pkl
