@@ -1,5 +1,5 @@
 from datetime import datetime
-import os
+from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import joblib
@@ -17,18 +17,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load your Random Forest model directly using joblib
-data_folder = r"C:\Users\ARYAN MAHAKUR\Desktop\VS CODE\PROJECT_2_INTERNSHIP\Data"
-model_path = os.path.join(
-    data_folder, "joblib", "best_random_forest_pipeline.joblib"
-)
+# Resolve path relative to this file (Map/app.py -> project root -> Data/joblib/...)
+BASE_DIR = Path(__file__).resolve().parent.parent
+model_path = BASE_DIR / "Data" / "joblib" / "best_random_forest_pipeline.joblib"
 
 try:
     model = joblib.load(model_path)
-    print(">>> Random Forest model loaded successfully via joblib!")
+    print(f">>> Random Forest model loaded successfully from {model_path}")
 except Exception as e:
     model = None
-    print(f">>> Error loading model: {e}")
+    print(f">>> Error loading model from {model_path}: {e}")
 
 
 class PredictionRequest(BaseModel):
