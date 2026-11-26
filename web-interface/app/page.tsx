@@ -745,7 +745,7 @@ export default function Home() {
             <h1 className="hero-stagger-1 text-3xl font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
               <span className="block text-white">We deliver the best route</span>
               <span className="mt-1 block bg-gradient-to-r from-violet-300 via-purple-200 to-amber-200 bg-clip-text text-transparent">
-                On every delivery path
+                To our delivery Partners
               </span>
             </h1>
             <p className="hero-stagger-2 mt-4 max-w-xl text-sm font-normal leading-relaxed text-slate-200/95 drop-shadow sm:mt-5 sm:text-lg xl:text-xl">

@@ -27,6 +27,7 @@ type SectorSlide = {
   points: string[];
   image: string;
   imageAlt: string;
+  imagePosition?: string;
   href: string;
   details: [SectorDetail, SectorDetail, SectorDetail];
 };
@@ -45,6 +46,7 @@ const SECTOR_SLIDES: SectorSlide[] = [
     ],
     image: '/images/6ae10840a5fcc3022b03341e_food-delivery-hero.webp',
     imageAlt: 'Food and beverage delivery dispatch',
+    imagePosition: 'object-[50%_18%]',
     href: '/demo',
     details: [
       {
@@ -77,6 +79,7 @@ const SECTOR_SLIDES: SectorSlide[] = [
     ],
     image: '/images/6ae10841c96ff8c92157e7af_grocery-delivery-hero.webp',
     imageAlt: 'Grocery delivery order planning',
+    imagePosition: 'object-[50%_18%]',
     href: '/demo',
     details: [
       {
@@ -109,6 +112,7 @@ const SECTOR_SLIDES: SectorSlide[] = [
     ],
     image: '/images/6ae10fe68599fd226e05bde9_farm-delivery-hero-mirrored.webp',
     imageAlt: 'Farm harvest route delivery',
+    imagePosition: 'object-[50%_18%]',
     href: '/demo',
     details: [
       {
@@ -141,6 +145,7 @@ const SECTOR_SLIDES: SectorSlide[] = [
     ],
     image: '/images/6ae108400835c9097b031f0d_flower-delivery-hero.webp',
     imageAlt: 'Florist same-day delivery',
+    imagePosition: 'object-[50%_18%]',
     href: '/demo',
     details: [
       {
@@ -173,6 +178,7 @@ const SECTOR_SLIDES: SectorSlide[] = [
     ],
     image: '/images/6ac6bc707385f726f30391c8_rt-industries-industry-courier.jpg',
     imageAlt: 'Courier parcel route dispatch',
+    imagePosition: 'object-[50%_18%]',
     href: '/demo',
     details: [
       {
@@ -462,7 +468,9 @@ export default function SectorsPage(): React.ReactElement {
                 <img
                   src={current.image}
                   alt={current.imageAlt}
-                  className="h-full w-full object-cover object-center transition-transform duration-700 ease-out hover:scale-[1.03]"
+                  className={`h-full w-full object-cover ${
+                    current.imagePosition ?? 'object-top'
+                  } transition-transform duration-700 ease-out hover:scale-[1.03]`}
                 />
               </div>
             </div>

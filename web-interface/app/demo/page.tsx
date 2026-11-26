@@ -4,10 +4,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Menu, X, RotateCcw } from 'lucide-react';
+import { Menu, X, RotateCcw, Clock } from 'lucide-react';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoibWFoYWt1cmFyeWFuIiwiYSI6ImNtd2praXgyNTA0dGMyeHM4Z3M1ZTRya3EifQ.Ajxe9WO0Pwn1LgDXHx5Tmw';
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 type LocationOption = {
   label: string;
@@ -219,7 +222,7 @@ export default function LiveMapPage(): React.ReactElement {
     const cParsed = parseLatLng(customerCoords);
 
     if (!rParsed || !cParsed) {
-      setError('Enter valid latitude and longitude coordinates.');
+      setError('Enter valid latitude and longitude coordinates (e.g. 30.7398, 76.7827).');
       return;
     }
 
@@ -271,7 +274,7 @@ export default function LiveMapPage(): React.ReactElement {
         mapInstance.fitBounds(bounds, { padding: 60, maxZoom: 15 });
       }
 
-      const mlRes = await fetch('http://127.0.0.1:8000/predict', {
+      const mlRes = await fetch(`${API_BASE_URL}/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -311,23 +314,24 @@ export default function LiveMapPage(): React.ReactElement {
       });
     } catch (err) {
       console.error(err);
-      setError('Could not reach prediction server on port 8000.');
+      setError(`Could not reach prediction server at ${API_BASE_URL}.`);
     } finally {
       setLoading(false);
     }
   };
 
   const selectClass =
-    'h-[46px] w-full min-w-0 cursor-pointer appearance-none rounded-2xl border border-white/10 bg-zinc-950/90 bg-[url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%2716%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23a1a1aa%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27m6 9 6 6 6-6%27/%3E%3C/svg%3E")] bg-[length:16px_16px] bg-[right_14px_center] bg-no-repeat pl-3.5 pr-9 text-[13px] font-semibold text-white outline-none transition-all duration-200 hover:border-white/20 focus:border-amber-400/70 focus:bg-zinc-950 focus:ring-4 focus:ring-amber-400/15 sm:pl-4 sm:pr-10';
+    'h-[54px] w-full min-w-0 cursor-pointer appearance-none rounded-2xl border border-white/15 bg-zinc-950 bg-[url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2718%27 height=%2718%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27m6 9 6 6 6-6%27/%3E%3C/svg%3E")] bg-[length:18px_18px] bg-[right_16px_center] bg-no-repeat pl-4 pr-11 text-sm font-semibold text-white shadow-inner outline-none transition-all duration-200 hover:border-white/30 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/20 sm:px-4';
 
   const inputClass =
-    'h-[46px] w-full min-w-0 rounded-2xl border border-white/10 bg-zinc-950/90 px-3.5 font-mono text-xs text-white outline-none transition-all duration-200 hover:border-white/20 focus:border-amber-400/70 focus:bg-zinc-950 focus:ring-4 focus:ring-amber-400/15 sm:px-4';
+    'h-[54px] w-full min-w-0 rounded-2xl border border-white/15 bg-zinc-950 px-4 font-mono text-sm text-white placeholder:text-zinc-500 shadow-inner outline-none transition-all duration-200 hover:border-white/30 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/20';
 
   return (
     <main className="relative flex min-h-screen w-full flex-col overflow-x-clip bg-[#09090b] font-sans text-zinc-100 antialiased selection:bg-amber-400 selection:text-zinc-950">
       <style jsx global>{`
         @keyframes panFlip {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0px) rotate(0deg);
           }
           40% {
@@ -472,9 +476,11 @@ export default function LiveMapPage(): React.ReactElement {
       </section>
 
       {/* ================= WORKBENCH ================= */}
-      <section id="predictor" className="mx-auto w-full max-w-6xl flex-1 px-3 pb-10 sm:px-6 sm:pb-12 lg:px-8">
+      <section
+        id="predictor"
+        className="mx-auto w-full max-w-6xl flex-1 px-3 pb-10 sm:px-6 sm:pb-12 lg:px-8"
+      >
         <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-zinc-900/70 p-3 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-5">
-          {/* Subtle corner accent glow */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-purple-600/10 blur-3xl"
@@ -484,15 +490,15 @@ export default function LiveMapPage(): React.ReactElement {
             className="pointer-events-none absolute -bottom-24 right-1/3 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl"
           />
 
-          <div className="relative grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-[1fr_1.18fr]">
-            {/* Top-Aligned Controls & Results Panel */}
-            <div className="flex min-w-0 flex-col justify-start gap-4 rounded-[22px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-zinc-950/80 p-4 sm:gap-5 sm:p-6">
-              <div className="flex flex-col gap-3.5 sm:gap-4">
+          <div className="relative grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-[1.08fr_1.12fr]">
+            {/* Controls & Results Panel */}
+            <div className="flex min-w-0 flex-col justify-start gap-5 rounded-[22px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-zinc-950/85 p-4 sm:p-6">
+              <div className="flex flex-col gap-4">
                 {/* Mode Segmented Control + Reset */}
-                <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-2.5">
+                <div className="flex flex-wrap items-center gap-2.5 sm:flex-nowrap">
                   <div
                     role="tablist"
-                    className="grid w-full flex-1 grid-cols-2 gap-1 rounded-full border border-white/10 bg-zinc-950 p-1 sm:w-auto"
+                    className="grid h-[42px] w-full flex-1 grid-cols-2 gap-1 rounded-full border border-white/10 bg-zinc-950 p-1 sm:w-auto"
                   >
                     <button
                       type="button"
@@ -508,7 +514,7 @@ export default function LiveMapPage(): React.ReactElement {
                         setCustomerCoords(c);
                         syncMarkersFromCoords(r, c);
                       }}
-                      className={`cursor-pointer rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
+                      className={`cursor-pointer rounded-full px-3 text-xs font-bold transition-all ${
                         mode === 'registered'
                           ? 'bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-md shadow-purple-600/25'
                           : 'text-zinc-400 hover:text-white'
@@ -525,7 +531,7 @@ export default function LiveMapPage(): React.ReactElement {
                         setError(null);
                         setResult(null);
                       }}
-                      className={`cursor-pointer rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
+                      className={`cursor-pointer rounded-full px-3 text-xs font-bold transition-all ${
                         mode === 'custom'
                           ? 'bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-md shadow-purple-600/25'
                           : 'text-zinc-400 hover:text-white'
@@ -539,27 +545,27 @@ export default function LiveMapPage(): React.ReactElement {
                     type="button"
                     onClick={handleReset}
                     title="Reset route & pins"
-                    className="inline-flex h-[34px] shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-zinc-950 px-3.5 text-xs font-semibold text-zinc-400 transition-all hover:border-white/25 hover:text-white"
+                    className="inline-flex h-[42px] shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-zinc-950 px-4 text-xs font-semibold text-zinc-300 transition-all hover:border-white/25 hover:text-white"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
                     <span>Reset</span>
                   </button>
                 </div>
 
-                {/* Inputs */}
+                {/* Input Boxes */}
                 {mode === 'registered' ? (
-                  <div className="flex flex-col gap-3.5">
-                    <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                       <label
                         htmlFor="registered-restaurant"
-                        className="flex items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-[0.06em] text-zinc-400"
+                        className="flex items-center justify-between gap-2 text-xs font-bold uppercase tracking-[0.06em] text-zinc-300"
                       >
                         <span className="flex items-center gap-2">
-                          <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+                          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
                           <span>Restaurant</span>
                         </span>
-                        <span className="font-mono text-[10px] font-normal text-zinc-500">
-                          PICKUP
+                        <span className="font-mono text-[11px] font-normal text-zinc-500">
+                          {REGISTERED_RESTAURANTS[selectedRestaurantIdx].coords}
                         </span>
                       </label>
                       <select
@@ -569,24 +575,28 @@ export default function LiveMapPage(): React.ReactElement {
                         className={selectClass}
                       >
                         {REGISTERED_RESTAURANTS.map((item, idx) => (
-                          <option key={item.label} value={idx} className="bg-zinc-950 text-white">
+                          <option
+                            key={item.label}
+                            value={idx}
+                            className="bg-zinc-950 text-white"
+                          >
                             {item.label}
                           </option>
                         ))}
                       </select>
                     </div>
 
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-2">
                       <label
                         htmlFor="registered-flat"
-                        className="flex items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-[0.06em] text-zinc-400"
+                        className="flex items-center justify-between gap-2 text-xs font-bold uppercase tracking-[0.06em] text-zinc-300"
                       >
                         <span className="flex items-center gap-2">
-                          <span className="h-2 w-2 shrink-0 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.7)]" />
+                          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.7)]" />
                           <span>Residence</span>
                         </span>
-                        <span className="font-mono text-[10px] font-normal text-zinc-500">
-                          DROPOFF
+                        <span className="font-mono text-[11px] font-normal text-zinc-500">
+                          {REGISTERED_FLATS[selectedFlatIdx].coords}
                         </span>
                       </label>
                       <select
@@ -596,7 +606,11 @@ export default function LiveMapPage(): React.ReactElement {
                         className={selectClass}
                       >
                         {REGISTERED_FLATS.map((item, idx) => (
-                          <option key={item.label} value={idx} className="bg-zinc-950 text-white">
+                          <option
+                            key={item.label}
+                            value={idx}
+                            className="bg-zinc-950 text-white"
+                          >
                             {item.label}
                           </option>
                         ))}
@@ -604,23 +618,24 @@ export default function LiveMapPage(): React.ReactElement {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-3.5">
-                    <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                       <label
                         htmlFor="restaurant-coords"
-                        className="flex items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-[0.06em] text-zinc-400"
+                        className="flex items-center justify-between gap-2 text-xs font-bold uppercase tracking-[0.06em] text-zinc-300"
                       >
                         <span className="flex items-center gap-2">
-                          <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+                          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
                           <span>Pickup (lat, lng)</span>
                         </span>
-                        <span className="font-mono text-[10px] font-normal text-zinc-500">
+                        <span className="font-mono text-[11px] font-normal text-zinc-500">
                           ORIGIN
                         </span>
                       </label>
                       <input
                         id="restaurant-coords"
                         type="text"
+                        placeholder="30.7398, 76.7827"
                         value={restaurantCoords}
                         onChange={(e) => {
                           setRestaurantCoords(e.target.value);
@@ -630,22 +645,23 @@ export default function LiveMapPage(): React.ReactElement {
                       />
                     </div>
 
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-2">
                       <label
                         htmlFor="customer-coords"
-                        className="flex items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-[0.06em] text-zinc-400"
+                        className="flex items-center justify-between gap-2 text-xs font-bold uppercase tracking-[0.06em] text-zinc-300"
                       >
                         <span className="flex items-center gap-2">
-                          <span className="h-2 w-2 shrink-0 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.7)]" />
+                          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.7)]" />
                           <span>Dropoff (lat, lng)</span>
                         </span>
-                        <span className="font-mono text-[10px] font-normal text-zinc-500">
+                        <span className="font-mono text-[11px] font-normal text-zinc-500">
                           DESTINATION
                         </span>
                       </label>
                       <input
                         id="customer-coords"
                         type="text"
+                        placeholder="30.7333, 76.7794"
                         value={customerCoords}
                         onChange={(e) => {
                           setCustomerCoords(e.target.value);
@@ -662,7 +678,7 @@ export default function LiveMapPage(): React.ReactElement {
                   type="button"
                   disabled={loading}
                   onClick={handleCalculateAndPredict}
-                  className="mt-1 h-[46px] w-full cursor-pointer rounded-2xl bg-amber-400 px-5 text-sm font-extrabold text-zinc-950 shadow-lg shadow-amber-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-300 disabled:cursor-wait disabled:opacity-70"
+                  className="mt-1 h-[52px] w-full cursor-pointer rounded-2xl bg-amber-400 px-5 text-sm font-extrabold text-zinc-950 shadow-lg shadow-amber-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-300 disabled:cursor-wait disabled:opacity-70"
                 >
                   {loading ? 'Flipping the Tawa...' : 'Calculate & Predict'}
                 </button>
@@ -670,17 +686,16 @@ export default function LiveMapPage(): React.ReactElement {
                 {error && (
                   <div
                     role="alert"
-                    className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2.5 text-xs font-semibold text-rose-300"
+                    className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-xs font-semibold text-rose-300"
                   >
                     {error}
                   </div>
                 )}
               </div>
 
-              {/* Funny "We Cooking" Placeholder When No Result Yet */}
+              {/* Cooking Placeholder When No Result Yet */}
               {!result && (
                 <div className="flex flex-1 flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-zinc-950/60 px-4 py-6 text-center">
-                  {/* Animated Steam + Tawa/Pan */}
                   <div className="relative mb-2 flex h-12 w-14 flex-col items-center justify-end">
                     <div className="mb-0.5 flex gap-2">
                       <span className="animate-steam-1 h-2.5 w-1 rounded-full bg-purple-300/80" />
@@ -724,7 +739,7 @@ export default function LiveMapPage(): React.ReactElement {
                       ? 'We cooking, please wait... 🔥'
                       : 'We cooking, please wait... (or hit Calculate!)'}
                   </p>
-                  <p className="mt-1 max-w-[250px] text-[11px] leading-relaxed text-zinc-400">
+                  <p className="mt-1 max-w-[260px] text-[11px] leading-relaxed text-zinc-400">
                     {loading
                       ? 'Tossing masala into the ML model & checking traffic signals.'
                       : 'Pick your spot and press Calculate & Predict before the rider eats your fries.'}
@@ -732,64 +747,72 @@ export default function LiveMapPage(): React.ReactElement {
                 </div>
               )}
 
+              {/* Clean Prediction Result Card */}
               {result && (
                 <div
-                  className="flex flex-col gap-3 border-t border-white/10 pt-4"
+                  className="flex flex-col gap-3.5 rounded-2xl border border-white/10 bg-zinc-950/90 p-4 shadow-inner sm:p-5"
                   aria-live="polite"
                 >
-                  <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-zinc-950/80 px-3.5 py-3">
-                    <div className="flex items-center gap-2.5 text-xs font-semibold text-white">
-                      <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
-                      <span className="truncate">{result.originName}</span>
+                  {/* Hero ETA Header */}
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-amber-400/25 bg-gradient-to-r from-amber-400/15 via-amber-400/5 to-transparent px-4 py-3.5">
+                    <div>
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300/90">
+                        Estimated Arrival
+                      </span>
+                      <div className="mt-0.5 flex items-baseline gap-2">
+                        <span className="text-2xl font-extrabold tracking-tight text-white">
+                          {result.totalMins} mins
+                        </span>
+                        <span className="text-xs font-semibold text-amber-300">
+                          ({result.etaClock})
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2.5 text-xs font-semibold text-white">
-                      <span className="h-2 w-2 shrink-0 rounded-full bg-rose-400" />
-                      <span className="truncate">{result.destName}</span>
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-400">
+                      <Clock className="h-5 w-5" />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                    <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-zinc-950/80 px-3 py-2.5">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.06em] text-zinc-500">
+                  {/* Clean 3-Metric Breakdown */}
+                  <div className="grid grid-cols-3 divide-x divide-white/10 rounded-xl border border-white/10 bg-zinc-900/60 py-3 text-center">
+                    <div className="px-2">
+                      <p className="text-[11px] font-medium text-zinc-400">
                         Distance
-                      </span>
-                      <span className="font-mono text-xs font-bold text-white">
+                      </p>
+                      <p className="mt-1 text-sm font-bold text-white">
                         {result.distanceKm}
-                      </span>
+                      </p>
                     </div>
-                    <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-zinc-950/80 px-3 py-2.5">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.06em] text-zinc-500">
-                        Travel
-                      </span>
-                      <span className="font-mono text-xs font-bold text-white">
-                        {result.travelMins} min
-                      </span>
-                    </div>
-                    <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-zinc-950/80 px-3 py-2.5">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.06em] text-zinc-500">
-                        Prep
-                      </span>
-                      <span className="font-mono text-xs font-bold text-white">
+                    <div className="px-2">
+                      <p className="text-[11px] font-medium text-zinc-400">
+                        Kitchen Prep
+                      </p>
+                      <p className="mt-1 text-sm font-bold text-white">
                         {result.prepMins} min
-                      </span>
+                      </p>
+                    </div>
+                    <div className="px-2">
+                      <p className="text-[11px] font-medium text-zinc-400">
+                        Drive Time
+                      </p>
+                      <p className="mt-1 text-sm font-bold text-white">
+                        {result.travelMins} min
+                      </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between gap-3 rounded-2xl border border-amber-400/30 bg-gradient-to-r from-purple-950/70 via-zinc-900 to-amber-950/40 px-4 py-3.5">
-                    <div className="flex min-w-0 flex-col gap-1">
-                      <span className="text-[11px] font-bold uppercase tracking-[0.06em] text-amber-300">
-                        Estimated Delivery Time
-                      </span>
-                      <span className="font-mono text-xs font-bold tracking-wide text-white sm:text-sm">
-                        Arrival {result.etaClock}
+                  {/* Compact Route Path */}
+                  <div className="flex flex-col gap-2 rounded-xl border border-white/5 bg-white/[0.02] px-3.5 py-2.5 text-xs">
+                    <div className="flex items-center gap-2.5 text-zinc-300">
+                      <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
+                      <span className="truncate font-medium">
+                        {result.originName}
                       </span>
                     </div>
-                    <div className="flex shrink-0 flex-col items-end">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.06em] text-zinc-400">
-                        Total Duration
-                      </span>
-                      <span className="font-mono text-lg font-extrabold text-amber-400 sm:text-xl">
-                        {result.totalMins} min
+                    <div className="flex items-center gap-2.5 text-zinc-300">
+                      <span className="h-2 w-2 shrink-0 rounded-full bg-rose-400" />
+                      <span className="truncate font-medium">
+                        {result.destName}
                       </span>
                     </div>
                   </div>
@@ -797,35 +820,28 @@ export default function LiveMapPage(): React.ReactElement {
               )}
             </div>
 
-            {/* Interactive Mapbox Canvas */}
-            <div className="relative min-h-[360px] min-w-0 overflow-hidden rounded-[22px] border border-white/10 bg-zinc-950 sm:min-h-[460px] lg:min-h-[540px]">
+            {/* Mapbox Panel */}
+            <div className="relative min-h-[380px] overflow-hidden rounded-[22px] border border-white/10 bg-zinc-950 lg:min-h-[520px]">
               <div
                 ref={mapContainerRef}
-                className="h-full min-h-[360px] w-full sm:min-h-[460px] lg:min-h-[540px]"
+                className="h-full min-h-[380px] w-full lg:min-h-[520px]"
               />
 
-              {/* Top-left floating pin legend */}
-              <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-wrap items-center gap-2 rounded-full border border-white/15 bg-zinc-950/85 px-3 py-1.5 text-[11px] font-semibold text-zinc-200 shadow-lg backdrop-blur-md sm:left-3.5 sm:top-3.5 sm:gap-3 sm:px-3.5">
+              <div className="pointer-events-none absolute left-3.5 top-3.5 z-10 flex flex-wrap items-center gap-3 rounded-full border border-white/15 bg-zinc-950/90 px-3.5 py-2 text-xs font-medium text-zinc-200 shadow-xl backdrop-blur-md">
                 <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                  <span>Restaurant </span>
+                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                  Restaurant
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-rose-400" />
-                  <span>Dropoff</span>
+                  <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
+                  Dropoff
                 </span>
-                <span className="hidden text-zinc-500 sm:inline">• Drag pins</span>
+                <span className="text-zinc-400">· Drag pins</span>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* ================= FOOTER ================= */}
-      <footer className="border-t border-white/10 px-4 py-6 text-center text-xs text-zinc-500">
-        <div>&copy; 2026 Deliver it. All rights reserved.</div>
-        <div className="mt-1">Reliable routing and dispatch for delivery partners.</div>
-      </footer>
     </main>
   );
 }
